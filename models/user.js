@@ -12,9 +12,7 @@ var userSchema = new Schema(
         adresse: { type: String },
         birthday: { type: String },
         Cin: { type: String },
-        role: {
-            type:Schema.Types.ObjectId,ref:'Role'
-        },
+        role: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }]
     });
 
 module.exports = mongoose.model('User', userSchema);
