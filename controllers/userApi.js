@@ -4,6 +4,26 @@ const User = require("../models/user")
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const passport = require('passport');
+const multer  = require('multer');
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './img/');
+    },
+    filename: (req, file, cb) => {
+        console.log(file);
+        cb(null,file.originalname);
+    }
+});
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype == 'image/jpeg' || file.mimetype == 'image/png') {
+        cb(null, true);
+    } else {
+      
+        cb(null, false);
+    }
+}
+const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 
 //add new user
@@ -115,6 +135,12 @@ router.get('/getAllusers',ensureToken, (req, res) => {
 
 });
 
+//Upload single image and add it to a user
+router.post('/upload/:idUser', upload.single('image'), (req, res, next) => {
+    User.findByIdAndUpdate(req.params.idUser, {image : req.file.path} ).then(data => {
+        res.send(data);
+    })
+});
 
 //login
 router.post('/user/login/', (req, res) => {
