@@ -8,6 +8,7 @@ var app = express();
 var cors = require('cors')
 require('./config/passport')
 const usersApi = require('./controllers/userApi')
+const congeApi = require('./controllers/congéApi')
 
 
 app.use(express.json());
@@ -15,6 +16,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(cors())
 app.use('/api/users', usersApi);
+app.use('/api/conge', congeApi);
 // app.use((req, res) => {
 //     res.json({ message: 'Votre requête a bien été reçue !' }); 
 //  });
