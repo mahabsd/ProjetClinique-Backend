@@ -8,7 +8,10 @@ var app = express();
 var cors = require('cors')
 require('./config/passport')
 const usersApi = require('./controllers/userApi');
-const mailApi = require("./controllers/EmailApi")
+const mailApi = require("./controllers/EmailApi");
+const actionnairesApi = require("./controllers/actionnaireApi");
+const doctorsApi = require("./controllers/doctorApi");
+const rendezvousApi = require("./controllers/rendezVousApi");
 
 
 
@@ -19,6 +22,12 @@ app.use(cors())
 app.use('/api/users', usersApi);
 app.use('/api/img', express.static('img'));
 app.use('/api/emails', mailApi);
+app.use('/api/actionnaires', actionnairesApi);
+app.use('/api/doctors', doctorsApi);
+app.use('/api/rendezvous', rendezvousApi);
+
+
+
 
 // app.use((req, res) => {
 //     res.json({ message: 'Votre requête a bien été reçue !' }); 
