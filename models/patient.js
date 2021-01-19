@@ -15,7 +15,7 @@ var patientSchema = new Schema(
         status: { type: String },
         descriptionAct: { type: String },
         service: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Service' }]},
-        {timestamps: { currentTime: () => Math.floor(Date.now() / 1000) }}
+        {timestamps: { currentTime: () => Date.now()  }}
 
     );
 

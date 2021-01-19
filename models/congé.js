@@ -8,7 +8,7 @@ var congeSchema = new Schema(
         motif: { type: String },
         statut: { type: String },
         userOwner: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]} ,
-        {timestamps: { currentTime: () => Math.floor(Date.now() / 1000) }}
+        {timestamps: { currentTime: () => Date.now()  }}
     );
 
 module.exports = mongoose.model('Conge', congeSchema);
