@@ -8,19 +8,25 @@ var bodyParser = require('body-parser');
 var app = express();
 var cors = require('cors')
 require('./config/passport')
+const congeApi = require('./controllers/congéApi')
+const patientApi = require('./controllers/patientApi')
+const serviceApi = require('./controllers/serviceApi')
+const maintenanceApi = require('./controllers/maintenanceApi')
 const usersApi = require('./controllers/userApi');
-const mailApi = require("./controllers/EmailApi");
 const actionnairesApi = require("./controllers/actionnaireApi");
 const doctorsApi = require("./controllers/doctorApi");
 const rendezvousApi = require("./controllers/rendezVousApi");
 
 
 
-app.use(express.json());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(cors())
 app.use('/api/users', usersApi);
+app.use('/api/conge', congeApi);
+app.use('/api/patient', patientApi);
+app.use('/api/service', serviceApi);
+app.use('/api/maintenance', maintenanceApi);
 app.use('/api/img', express.static('img'));
 app.use('/api/emails', mailApi);
 app.use('/api/actionnaires', actionnairesApi);
