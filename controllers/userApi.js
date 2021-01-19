@@ -4,6 +4,26 @@ const User = require("../models/user")
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const passport = require('passport');
+const multer  = require('multer');
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './img/');
+    },
+    filename: (req, file, cb) => {
+        console.log(file);
+        cb(null,file.originalname);
+    }
+});
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype == 'image/jpeg' || file.mimetype == 'image/png') {
+        cb(null, true);
+    } else {
+      
+        cb(null, false);
+    }
+}
+const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 
 //add new user
@@ -115,6 +135,12 @@ router.get('/getAllusers',ensureToken, (req, res) => {
 
 });
 
+//Upload single image and add it to a user
+router.post('/upload/:idUser', upload.single('image'), (req, res, next) => {
+    User.findByIdAndUpdate(req.params.idUser, {image : req.file.path} ).then(data => {
+        res.send(data);
+    })
+});
 
 //login
 router.post('/user/login/', (req, res) => {
@@ -124,8 +150,8 @@ router.post('/user/login/', (req, res) => {
     }).then(user => {
         //if user not exist then return status 400
         if (!user) return res.status(400).json({
-            msg: "User does not exist"
-        })
+            message: "Please verify your e-mail or password."
+         })
         bcrypt.compare(req.body.password, user.password, (err, data) => {
             //if error than throw error
             if (err) throw err
@@ -135,11 +161,11 @@ router.post('/user/login/', (req, res) => {
                 return res.status(200).json({
                     user,
                     token: token,
-                    msg: "Login success"
+                    message: "Welcome back, to aa"
                 })
             } else {
                 return res.status(401).json({
-                    msg: "Invalid credencial "
+                    message: "Please verify your e-mail or password."
                 })
             }
 
