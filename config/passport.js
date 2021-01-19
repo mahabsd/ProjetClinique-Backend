@@ -13,7 +13,6 @@ passport.use(new LocalStrategy({
       
       if(doc!=null){
        
-     
         bcrypt.compare(password, doc.password, function(err, result) {
             if(result) {
            
