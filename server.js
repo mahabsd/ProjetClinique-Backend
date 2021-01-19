@@ -1,7 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
-require('./db/connect')
-require('./db/init-script')
+require('./db/connect');
+require('./db/init-script');
 
 const hostname = "127.0.0.1";
 const port = 3000;
