@@ -150,8 +150,8 @@ router.post('/user/login/', (req, res) => {
     }).then(user => {
         //if user not exist then return status 400
         if (!user) return res.status(400).json({
-            msg: "User does not exist"
-        })
+            message: "Please verify your e-mail or password."
+         })
         bcrypt.compare(req.body.password, user.password, (err, data) => {
             //if error than throw error
             if (err) throw err
@@ -161,11 +161,11 @@ router.post('/user/login/', (req, res) => {
                 return res.status(200).json({
                     user,
                     token: token,
-                    msg: "Login success"
+                    message: "Welcome back, to aa"
                 })
             } else {
                 return res.status(401).json({
-                    msg: "Invalid credencial "
+                    message: "Please verify your e-mail or password."
                 })
             }
 

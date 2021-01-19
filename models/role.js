@@ -3,9 +3,9 @@ var Schema = mongoose.Schema
 
 var roleSchema = new Schema(
     {
-        role: [{ type: String }]},
-      {  timestamps: { currentTime: () => Math.floor(Date.now() / 1000) }
+        name: [{ type: String }]},
+      {  timestamps: true }
 
-    });
+    );
 
 module.exports = mongoose.model('Role', roleSchema);
