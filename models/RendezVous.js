@@ -7,7 +7,7 @@ var RendezVousSchema = new Schema(
         userRendezVous: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
         dateDebut: [{ type: String }],
         dateFin: [{ type: String }]},
-      {  timestamps: { currentTime: () => Math.floor(Date.now() / 1000) }
+      {  timestamps: true
 
     });
 
