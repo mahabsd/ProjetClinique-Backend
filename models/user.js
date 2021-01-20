@@ -12,7 +12,7 @@ var userSchema = new Schema(
         adresse: { type: String },
         birthday: { type: String },
         cin: { type: String },
-        role: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }],
+        roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }],
         image : {type : String},
         status: {type : String},
         genre: {type : String}},

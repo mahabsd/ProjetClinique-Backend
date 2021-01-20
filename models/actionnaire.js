@@ -11,7 +11,7 @@ var actionnaireSchema = new Schema(
         specialité: { type: String },
         userActionnaire: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
         image : {type : String}},
-        {timestamps: { currentTime: () => Math.floor(Date.now() / 1000) }}
+        {timestamps: true}
     );
 
 module.exports = mongoose.model('Actionnaire', actionnaireSchema);
