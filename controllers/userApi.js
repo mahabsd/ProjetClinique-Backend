@@ -157,9 +157,14 @@ router.post('/user/login/', (req, res) => {
             if (err) throw err
             //if both match then you can do anything
             if (data) {
-                var token = jwt.sign(req.body, 'secret');
+                const data1 = {
+                    _id: user._id,
+                    email: user.email,
+                    roles: user.roles
+                    
+                }
+                var token = jwt.sign(data1, 'secret');
                 return res.status(200).json({
-                    user,
                     token: token,
                     message: "Welcome back, to aa"
                 })
