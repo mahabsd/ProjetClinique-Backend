@@ -20,6 +20,7 @@ const rendezvousApi = require("./controllers/rendezVousApi");
 
 
 
+
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(cors())
@@ -29,7 +30,7 @@ app.use('/api/patient', patientApi);
 app.use('/api/service', serviceApi);
 app.use('/api/maintenance', maintenanceApi);
 app.use('/api/img', express.static('img'));
-app.use('/api/emails', mailApi);
+
 app.use('/api/actionnaires', actionnairesApi);
 app.use('/api/doctors', doctorsApi);
 app.use('/api/rendezvous', rendezvousApi);
