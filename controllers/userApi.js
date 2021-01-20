@@ -60,7 +60,7 @@ router.get('/user/:id',ensureToken, (req, res) => {
             res.status(403)
 
         } else {
-            User.findById(req.params.id).populate('Role').exec().then(data => {
+            User.findById(req.params.id).populate('roles').exec().then(data => {
                 res.status(200).json(data);
                 // res.send(data); la meme que json(data)
             }).catch(err => res.status(400).json('Error: ' + err));
@@ -147,7 +147,7 @@ router.post('/user/login/', (req, res) => {
 
     User.findOne({
         email: req.body.email
-    }).then(user => {
+    }).populate('roles').then(user => {
         //if user not exist then return status 400
         if (!user) return res.status(400).json({
             message: "Please verify your e-mail or password."
