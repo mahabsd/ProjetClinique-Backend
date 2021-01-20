@@ -48,4 +48,7 @@ Role.count(function (err, count) {
     else {
         console.log("Found Records : " + count);
     }
+
+
+    
 });
