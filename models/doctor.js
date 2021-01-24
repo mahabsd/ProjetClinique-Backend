@@ -3,16 +3,27 @@ var Schema = mongoose.Schema
 
 var doctorSchema = new Schema(
     
-       { firstName: { type: String },
-        lastName: { type: String },
-        Email: { type: String },
-        phone: { type: String },
-        adresse: { type: String },
-        birthday: { type: String },
-        specialité: { type: String },
+    {
+        profile: {
+            name: { type: String },
+            surname: { type: String },
+            birthday: { type: String },
+            image: { type: String },
+        },
+        work: {
+            position: { type: String },
+        },
+        contacts: {
+            email: { type: String },
+            phone: { type: String },
+            address: { type: String },
+        },
+        settings:{
+            isDeleted: { type: Boolean },
+            bgColor: { type: String }
+        },
         userDoctor: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-        image : {type : String}},
-        {timestamps: true}
-    );
 
+    },
+    { timestamps: true })
 module.exports = mongoose.model('Doctor', doctorSchema);
