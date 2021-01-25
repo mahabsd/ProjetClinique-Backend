@@ -14,8 +14,8 @@ router.post('/patient/add/', ensureToken, async (req, res, next) => {
             })
         else {
             await Patient.create(req.body).then(function (patient) {
-                res.send(patient);
-                res.status(200).json(" successfully");
+                
+                res.status(200).json(patient);
             }).catch(next);
         }
     });
@@ -99,8 +99,8 @@ router.get('/getAllpatients',ensureToken, async(req, res) => {
         } else {
             await Patient.find({}).then(function (patients) {
                 
-                res.send(patients)
-                res.status(200).json(" successfully");
+                
+                res.status(200).json(patients);
             }).catch(err => res.status(400).json('Error: ' + err));
         }
     });
