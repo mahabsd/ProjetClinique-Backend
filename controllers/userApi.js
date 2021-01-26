@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const User = require("../models/user")
+const User = require("../models/user");
+const Role = require("../models/role");
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const passport = require('passport');
@@ -39,7 +40,7 @@ router.post('/user/add/',ensureToken, (req, res) => {
             bcrypt.hash(req.body.password, 10, function (err, hash) {
                 user.password = hash;
                 user.save().then(item => {
-                    res.send(req.body);
+                    res.send('hello from server '+req.body);
                     console.log("data saved " + user.password);
                 }).catch(err => {
                     console.log(err);
@@ -60,7 +61,7 @@ router.get('/user/:id',ensureToken, (req, res) => {
             res.status(403)
 
         } else {
-            User.findById(req.params.id).populate('roles').exec().then(data => {
+            User.findById(req.params.id).populate('work.roles').exec().then(data => {
                 res.status(200).json(data);
                 // res.send(data); la meme que json(data)
             }).catch(err => res.status(400).json('Error: ' + err));
@@ -125,9 +126,8 @@ router.get('/getAllusers',ensureToken, (req, res) => {
             res.status(403)
 
         } else {
-            User.find().populate('Role').exec().then(function (users) {
-                res.send(users)
-                res.status(200).json();
+            User.find().populate('work.roles').exec().then(function (users) {
+                res.status(200).json(users);
             }).catch(err => res.status(400).json('Error: ' + err));
         }
     });
@@ -142,12 +142,29 @@ router.post('/upload/:idUser', upload.single('image'), (req, res, next) => {
     })
 });
 
+//get All users
+router.get('/getAllRoles',ensureToken, (req, res) => {
+
+    jwt.verify(req.token, process.env.JWT_KEY, (err) => {
+        if (err) {
+
+            res.status(403)
+
+        } else {
+            Role.find().exec().then(function (roles) {
+                res.status(200).json(roles);
+            }).catch(err => res.status(400).json('Error: ' + err));
+        }
+    });
+
+});
+
 //login
 router.post('/user/login/', (req, res) => {
 
     User.findOne({
         email: req.body.email
-    }).populate('roles').then(user => {
+    }).populate('work.roles').then(user => {
         //if user not exist then return status 400
         if (!user) return res.status(400).json({
             message: "Please verify your e-mail or password."
@@ -161,7 +178,6 @@ router.post('/user/login/', (req, res) => {
                     _id: user._id,
                     email: user.email,
                     roles: user.roles
-                    
                 }
                 var token = jwt.sign(data1, 'secret');
                 return res.status(200).json({

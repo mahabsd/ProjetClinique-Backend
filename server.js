@@ -18,14 +18,9 @@ const actionnairesApi = require("./controllers/actionnaireApi");
 const doctorsApi = require("./controllers/doctorApi");
 const rendezvousApi = require("./controllers/rendezVousApi");
 
-
-
-
-
-
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
-app.use(cors())
+app.use(cors());
 app.use('/api/users', usersApi);
 app.use('/api/conges', congeApi);
 app.use('/api/patients', patientApi);
