@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const Role = require("../models/role");
+const Service = require("../models/service");
 const bcrypt = require('bcryptjs');
 
 
@@ -12,8 +13,8 @@ var roles = [
     { name: "secritaire personnelle" },
     { name: "surveillant Générale" },
     { name: "secritaire générale" },
-    { name: "responsable facturation" },           
-    { name: "Respnsable Pharmacie" },                    
+    { name: "responsable facturation" },
+    { name: "Respnsable Pharmacie" },
     { name: "respon-financier" },
     { name: "gouvernantes" },
     { name: "hyginiste" },
@@ -23,10 +24,10 @@ var roles = [
     { name: "surveillant Bloc" },
     { name: "surveillant Maternité" },
     { name: "respon-maintenance" },
-    { name: "cassiers principale" },          
-    { name: "econome" },     
-    { name: "comptable" },        
-    { name: "acceuil+cassiers+facturations " },   
+    { name: "cassiers principale" },
+    { name: "econome" },
+    { name: "comptable" },
+    { name: "acceuil+cassiers+facturations " },
     { name: "infirmiers et aide" },
     { name: "anesthesistes" },
     { name: "ouvriers" },
@@ -34,6 +35,12 @@ var roles = [
     { name: "team-matenaince" },
     { name: "Services" },
     { name: "pharmaciens" },
+]
+var services = [
+    { name: "Bloc" },
+    { name: "Covid" },
+    { name: "Chirurgie" },
+    { name: "Maternité" },
 ]
 
 const salt = bcrypt.genSaltSync(10);
@@ -46,7 +53,7 @@ var users = [
         profile: {
             name: "Ashley",
             surname: "Ahlberg",
-            birthday: new Date(1981,2,29),
+            birthday: new Date(1981, 2, 29),
             gender: "female",
             image: "assets/img/profile/ashley.jpg"
         },
@@ -55,17 +62,17 @@ var users = [
             roles: [],
             soldeConge: 0
         },
-        contacts:{
+        contacts: {
             email: "ashley@gmail.com",
             phone: "(202) 756-9756",
             address: "Washington"
         },
         social: {
-            facebook:"ashley_ahlberg",
-            twitter:"ashley_ahlberg",
-            google:"ashley_ahlberg"
+            facebook: "ashley_ahlberg",
+            twitter: "ashley_ahlberg",
+            google: "ashley_ahlberg"
         },
-        settings:{
+        settings: {
             // isActive: true,
             isDeleted: false,
             registrationDate: "2012-10-13T12:20:40.511Z",
@@ -77,6 +84,7 @@ var users = [
 ];
 var Users;
 // To Count Documents of a particular collection
+
 Role.count(function (err, count) {
     console.dir(err);
     console.dir(count);
@@ -110,5 +118,14 @@ Role.count(function (err, count) {
     }
 
 
-    
+
 });
+
+// Service.count(function (err, count) {
+//     if (count == 0) {
+//         Service.insertMany(services).then((servicesDB) => {
+//             console.log("service added successfully");
+//             console.log(servicesDB);
+//         }
+//     }
+// });

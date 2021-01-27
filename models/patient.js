@@ -3,21 +3,34 @@ var Schema = mongoose.Schema
 
 var patientSchema = new Schema(
     {
-        name: { type: String },
-        prename: { type: String },
-        Email: { type: String },
-        password: { type: String },
-        dateEntree: { type: Date },
-        phone: { type: String },
-        adresse: { type: String },
-        birthday: { type: String },
-        Cin: { type: String },
-        status: { type: String },
-        descriptionAct: { type: String },
-        service: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Service' }]},
-        {timestamps: { currentTime: () => Date.now()  }}
+        cin: { type: String },
+        dateDentre: { type: String },
+        service: { type: String },
+        description: { type: String },
+        profile: {
+            name: { type: String },
+            surname: { type: String },
+            birthday: { type: String },
+            image: { type: String },
+        },
+        work: {
+            position: { type: String },
+        },
+        contacts: {
+            email: { type: String },
+            phone: { type: String },
+            address: { type: String },
+        },
+        settings:{
+            isDeleted: { type: Boolean },
+            bgColor: { type: String }
+        },
+       
 
-    );
+    },
+    { timestamps: true }
+);
+
 
 module.exports = mongoose.model('Patient', patientSchema);
 
