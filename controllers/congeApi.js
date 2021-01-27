@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Conge = require("../models/congé")
+const Conge = require("../models/conge")
 const jwt = require("jsonwebtoken");
 
 
@@ -14,8 +14,8 @@ router.post('/conge/add/', ensureToken, async (req, res, next) => {
             })
         else {
             await Conge.create(req.body).then(function (conge) {
-                res.send(conge);
-                res.status(200).json(" successfully");
+               // res.send();
+                res.status(200).json(" successfully"+ conge);
             }).catch(next);
         }
     });
@@ -32,8 +32,8 @@ router.get('/conge/:id',ensureToken, async(req, res) => {
         } else {
             await Conge.findOne({ _id: req.params.id }) // key to populate
             .then(Conge => {
-                res.json(Conge);
-                res.status(200).json(" successfully");
+              //  res.json();
+                res.status(200).json(Conge);
                 // res.send(data); la meme que json(data)
             }).catch(err => res.status(400).json('Error: ' + err));
         }
@@ -53,7 +53,7 @@ router.delete('/conge/delete/:id',ensureToken, async (req, res) => {
         } else {
 
             await Conge.findByIdAndRemove({ _id: req.params.id }).then(function (conge) {
-                res.send(conge);
+                //res.send(conge);
                 res.status(200).json("deleted successfully");
 
                 }).catch(err => res.status(400).json('Error: ' + err));
@@ -76,8 +76,8 @@ router.put('/conge/update/:id',ensureToken, async(req, res) => {
         } else {
             await Conge.findByIdAndUpdate({ _id: req.params.id }, req.body).then(async () => {
                 await Conge.findOne({ _id: req.params.id }).then(function (conge) {
-                    res.send(conge);
-                    res.status(200).json("successfully");
+                  //  res.send(conge);
+                    res.status(200).json(conge);
                 }).catch(err => res.status(400).json('Error: ' + err));
             })
 
@@ -98,9 +98,8 @@ router.get('/getAllconges',ensureToken, async(req, res) => {
 
         } else {
             await Conge.find({}).then(function (conges) {
-                
-                res.send(conges)
-                res.status(200).json(" successfully");
+               // res.send(conges)
+                res.status(200).json(conges);
             }).catch(err => res.status(400).json('Error: ' + err));
         }
     });

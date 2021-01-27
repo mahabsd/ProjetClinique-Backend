@@ -42,7 +42,7 @@ var users = [
     // { username: "admin", lastName: "admin", profile: {name:"nidhal",surname: "nidhal"}, contacts:{email: "admin@gmail.com"}, password: bcrypt.hashSync("admin", salt), roles: [] },
     {
         username: "pretty",
-        password:  bcrypt.hashSync("pretty123"),
+        password:  bcrypt.hashSync("123"),
         profile: {
             name: "Ashley",
             surname: "Ahlberg",
@@ -53,7 +53,7 @@ var users = [
         work: {
             company: "Google",
             roles: [],
-            soldeConge: 5000
+            soldeConge: 0
         },
         contacts:{
             email: "ashley@gmail.com",
