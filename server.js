@@ -2,17 +2,18 @@ var createError = require('http-errors');
 var express = require('express');
 require('./db/connect');
 require('./db/init-script');
+require('./config/passport');
+require('./controllers/soldeConge');
 
 const hostname = "127.0.0.1";
 const port = 3000;
 var bodyParser = require('body-parser');
 var app = express();
-var cors = require('cors')
-require('./config/passport')
-const congeApi = require('./controllers/congéApi')
-const patientApi = require('./controllers/patientApi')
-const serviceApi = require('./controllers/serviceApi')
-const maintenanceApi = require('./controllers/maintenanceApi')
+var cors = require('cors');
+const congeApi = require('./controllers/congeApi');
+const patientApi = require('./controllers/patientApi');
+const serviceApi = require('./controllers/serviceApi');
+const maintenanceApi = require('./controllers/maintenanceApi');
 const usersApi = require('./controllers/userApi');
 const actionnairesApi = require("./controllers/actionnaireApi");
 const doctorsApi = require("./controllers/doctorApi");

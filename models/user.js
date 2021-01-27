@@ -17,7 +17,7 @@ var userSchema = new Schema(
         work: {
             company: { type: String },
             roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }],
-            soldeConge: { type: String },
+            soldeConge: { type: Number },
         },
         contacts: {
             email: { type: String },

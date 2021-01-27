@@ -28,7 +28,7 @@ const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 
 //add new user
-router.post('/user/add/',ensureToken, (req, res) => {
+router.post('/user/add/',ensureToken, upload.single('image'), (req, res) => {
 
     jwt.verify(req.token, process.env.JWT_KEY, (err) => {
         if (err) {
@@ -176,8 +176,8 @@ router.post('/user/login/', (req, res) => {
             if (data) {
                 const data1 = {
                     _id: user._id,
-                    email: user.email,
-                    roles: user.roles
+                    email: user.contacts.email,
+                    roles: user.work.roles
                 }
                 var token = jwt.sign(data1, 'secret');
                 return res.status(200).json({
