@@ -60,7 +60,7 @@ var users = [
         work: {
             company: "Google",
             roles: [],
-            soldeConge: 0
+            soldeConge: 5
         },
         contacts: {
             email: "ashley@gmail.com",
