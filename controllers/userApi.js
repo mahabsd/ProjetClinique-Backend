@@ -177,7 +177,8 @@ router.post('/user/login/', (req, res) => {
                 const data1 = {
                     _id: user._id,
                     email: user.contacts.email,
-                    roles: user.work.roles
+                    roles: user.work.roles,
+                    soldeConge: user.work.soldeConge
                 }
                 var token = jwt.sign(data1, 'secret');
                 return res.status(200).json({
