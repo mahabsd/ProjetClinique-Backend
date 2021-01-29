@@ -30,7 +30,7 @@ router.get('/conge/:id',ensureToken, async(req, res) => {
                 message: "forbidden"
             })
         } else {
-            await Conge.findOne({ _id: req.params.id }) // key to populate
+            await Conge.findOne({ _id: req.params.id }).populate('userOwner')// key to populate
             .then(Conge => {
               //  res.json();
                 res.status(200).json(Conge);
@@ -97,17 +97,14 @@ router.get('/getAllconges',ensureToken, async(req, res) => {
             })
 
         } else {
-            await Conge.find({}).then(function (conges) {
+            await Conge.find({}).populate('userOwner').then(function (conges) {
                // res.send(conges)
                 res.status(200).json(conges);
             }).catch(err => res.status(400).json('Error: ' + err));
         }
     });
 
-
 });
-
-
 
 
 function ensureToken(req, res, next) {

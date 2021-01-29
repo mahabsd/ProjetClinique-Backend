@@ -5,6 +5,7 @@ var congeSchema = new Schema(
     {
         nbreJours: { type: Number },
         dateDebut: { type: Date },
+        dateFin: { type: Date },
         motif: { type: String },
         status: { type: String },
         userOwner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }},
