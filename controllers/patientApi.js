@@ -44,7 +44,8 @@ router.post('/upload', upload.single('images'), async (req, res, next) => {
         await imgModel.create(obj)
     
     try {
-        await res.send(req.files);
+        // await res.send(req.file);
+        await res.status(200).json("Files uploded successfully"+req.file);
         // return res.json
         // //({
         // //     message: 'Files uploded successfully '
@@ -93,7 +94,7 @@ router.get('/patient/:id',ensureToken, async(req, res) => {
         } else {
             await Patient.findOne({ _id: req.params.id }) // key to populate
             .then(patient=> {
-                res.json(patient);
+                // res.json(patient);
                 res.status(200).json(" successfully");
                 // res.send(data); la meme que json(data)
             }).catch(err => res.status(400).json('Error: ' + err));
@@ -114,7 +115,7 @@ router.delete('/patient/delete/:id',ensureToken, async (req, res) => {
         } else {
 
             await Patient.findByIdAndRemove({ _id: req.params.id }).then(function (patient) {
-                res.send(patient);
+                // res.send(patient);
                 res.status(200).json("deleted successfully");
 
                 }).catch(err => res.status(400).json('Error: ' + err));
@@ -137,7 +138,7 @@ router.put('/patient/update/:id',ensureToken, async(req, res) => {
         } else {
             await Patient.findByIdAndUpdate({ _id: req.params.id }, req.body).then(async () => {
                 await Patient.findOne({ _id: req.params.id }).then(function (patient) {
-                    res.send(patient);
+                    // res.send(patient);
                     res.status(200).json("successfully");
                 }).catch(err => res.status(400).json('Error: ' + err));
             })
