@@ -3,10 +3,13 @@ var Schema = mongoose.Schema
 
 var RendezVousSchema = new Schema(
     {
-        titre: [{ type: String }],
-        userRendezVous: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-        dateDebut: [{ type: String }],
-        dateFin: [{ type: String }]},
+      title: { type: String },
+        descrip: { type: String },
+        userOwner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        start: { type: String },
+        isEdit: { type: String }},
+
+        
       {  timestamps: true
 
     });

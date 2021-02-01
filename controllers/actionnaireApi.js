@@ -13,8 +13,9 @@ router.post('/actionnaire/add', ensureToken, (req, res) => {
         } else {
             var actionnaire = new Actionnaire(req.body);
             actionnaire.save().then(function () {
-                console.log(actionnaire);
-                res.json(actionnaire);
+                // console.log(actionnaire);
+                // res.json(actionnaire);
+                res.status(200).json(actionnaire);
             }).catch(err => res.status(400).json('Error: ' + err));
         }
     });

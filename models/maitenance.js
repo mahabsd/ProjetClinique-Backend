@@ -3,10 +3,13 @@ var Schema = mongoose.Schema
 
 var maintenanceSchema = new Schema(
     {
+        title: { type: String } ,
         type: { type: String } ,
         descriptionMaintenance: { type: String },
-        statut: { type: String },
-        userOwner: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]} ,
+        statut: { type: String ,
+                 default:"pending"
+        },
+        userOwner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }} ,
         {timestamps: { currentTime: () => Date.now() }}
     );
 

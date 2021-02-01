@@ -6,23 +6,23 @@ const jwt = require("jsonwebtoken");
 
 
 
-router.post('/maitenance/add/', ensureToken, async (req, res, next) => {
+router.post('/maintenance/add/', ensureToken, async (req, res, next) => {
     jwt.verify(req.token, process.env.JWT_KEY, async (err, data) => {
         if (err)
             res.status(403).json({
                 message: "forbidden"
             })
         else {
-            await Maintenance.create(req.body).then(function (maitenance) {
-                res.send(maitenance);
-                res.status(200).json(" successfully");
+            await Maintenance.create(req.body).then(function (patient) {
+                
+                res.status(200).json(patient);
             }).catch(next);
         }
     });
 });
 
 
-router.get('/maitenance/:id',ensureToken, async(req, res) => {
+router.get('/maintenance/:id',ensureToken, async(req, res) => {
     jwt.verify(req.token, process.env.JWT_KEY,async (err) => {
         if (err) {
 
@@ -31,8 +31,8 @@ router.get('/maitenance/:id',ensureToken, async(req, res) => {
             })
         } else {
             await Maintenance.findOne({ _id: req.params.id }) // key to populate
-            .then(maitenance=> {
-                res.json(maitenance);
+            .then(patient=> {
+                // res.json(patient);
                 res.status(200).json(" successfully");
                 // res.send(data); la meme que json(data)
             }).catch(err => res.status(400).json('Error: ' + err));
@@ -41,7 +41,7 @@ router.get('/maitenance/:id',ensureToken, async(req, res) => {
 });
 
 
-router.delete('/maitenance/delete/:id',ensureToken, async (req, res) => {
+router.delete('/maintenance/delete/:id',ensureToken, async (req, res) => {
     jwt.verify(req.token, process.env.JWT_KEY, async(err) => {
         if (err) {
 
@@ -52,8 +52,8 @@ router.delete('/maitenance/delete/:id',ensureToken, async (req, res) => {
 
         } else {
 
-            await Maintenance.findByIdAndRemove({ _id: req.params.id }).then(function (maitenance) {
-                res.send(maitenance);
+            await Maintenance.findByIdAndRemove({ _id: req.params.id }).then(function (patient) {
+                // res.send(patient);
                 res.status(200).json("deleted successfully");
 
                 }).catch(err => res.status(400).json('Error: ' + err));
@@ -64,7 +64,7 @@ router.delete('/maitenance/delete/:id',ensureToken, async (req, res) => {
 });
 
 
-router.put('/patient/update/:id',ensureToken, async(req, res) => {
+router.put('/maintenance/update/:id',ensureToken, async(req, res) => {
 
     jwt.verify(req.token, process.env.JWT_KEY, async(err) => {
         if (err) {
@@ -75,8 +75,8 @@ router.put('/patient/update/:id',ensureToken, async(req, res) => {
 
         } else {
             await Maintenance.findByIdAndUpdate({ _id: req.params.id }, req.body).then(async () => {
-                await Maintenance.findOne({ _id: req.params.id }).then(function (maitenance) {
-                    res.send(maitenance);
+                await Maintenance.findOne({ _id: req.params.id }).then(function (patient) {
+                    // res.send(patient);
                     res.status(200).json("successfully");
                 }).catch(err => res.status(400).json('Error: ' + err));
             })
@@ -86,8 +86,7 @@ router.put('/patient/update/:id',ensureToken, async(req, res) => {
 
 });
 
-
-router.get('/getAllpatients',ensureToken, async(req, res) => {
+router.get('/getAllmaintenances',ensureToken, async(req, res) => {
 
     jwt.verify(req.token, process.env.JWT_KEY, async(err) => {
         if (err) {
