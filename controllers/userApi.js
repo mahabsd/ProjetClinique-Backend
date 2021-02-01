@@ -32,22 +32,21 @@ router.post('/user/add/',ensureToken, upload.single('image'), (req, res) => {
 
     jwt.verify(req.token, process.env.JWT_KEY, (err) => {
         if (err) {
-
             res.status(403)
-
         } else {
-            var user = new User(req.body);
-            bcrypt.hash(req.body.password, 10, function (err, hash) {
-                user.password = hash;
-                user.save().then(item => {
-                    res.send('hello from server '+req.body);
-                    console.log("data saved " + user.password);
-                }).catch(err => {
-                    console.log(err);
-                });
-            });
-            // setup e-mail data with unicode symbols
-
+            console.log(res);
+            // var user = new User(req.body);
+            // bcrypt.hash(req.body.password, 10, function (err, hash) {
+            //     user.password = hash;
+            //  //   user.profile.image = req.profile.image.path
+            //     console.log( user.profile.image );
+            //     user.save().then(item => {
+            //         res.send('hello from server '+req.body);
+            //       //  console.log("data saved " + user.password);
+            //     }).catch(err => {
+            //         console.log(err);
+            //     });
+            // });
         }
     });
 
@@ -63,7 +62,6 @@ router.get('/user/:id',ensureToken, (req, res) => {
         } else {
             User.findById(req.params.id).populate('work.roles').exec().then(data => {
                 res.status(200).json(data);
-                // res.send(data); la meme que json(data)
             }).catch(err => res.status(400).json('Error: ' + err));
         }
     });
@@ -136,10 +134,11 @@ router.get('/getAllusers',ensureToken, (req, res) => {
 });
 
 //Upload single image and add it to a user
-router.post('/upload/:idUser', upload.single('image'), (req, res, next) => {
-    User.findByIdAndUpdate(req.params.idUser, {image : req.file.path} ).then(data => {
-        res.send(data);
-    })
+router.post('/upload/', upload.single('image'), (req, res, next) => {
+    console.log(req.file.path);
+    // User.findByIdAndUpdate(req.params.idUser, {profile: {image : req.file.path} } ).then(data => {
+    //     res.send({success : true, status : 'uploaded successfully'});
+    // })
 });
 
 //get All users
@@ -162,9 +161,9 @@ router.get('/getAllRoles',ensureToken, (req, res) => {
 //login
 router.post('/user/login/', (req, res) => {
 
-    User.findOne({
-        email: req.body.email
-    }).populate('work.roles').then(user => {
+    User.findOne(
+          {"contacts.email" : req.body.email }, function(err,obj) { console.log(obj); }
+         ).populate('work.roles').then(user => {
         //if user not exist then return status 400
         if (!user) return res.status(400).json({
             message: "Please verify your e-mail or password."
@@ -176,14 +175,15 @@ router.post('/user/login/', (req, res) => {
             if (data) {
                 const data1 = {
                     _id: user._id,
-                    email: user.contacts.email,
+                    email: user.email,
                     roles: user.work.roles,
                     soldeConge: user.work.soldeConge
                 }
                 var token = jwt.sign(data1, 'secret');
                 return res.status(200).json({
                     token: token,
-                    message: "Welcome back, to aa"
+                    user,
+                    message: "Welcome back, to okba"
                 })
             } else {
                 return res.status(401).json({
