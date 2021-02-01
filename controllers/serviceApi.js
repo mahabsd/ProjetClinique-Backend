@@ -14,7 +14,7 @@ router.post('/service/add/', ensureToken, async (req, res, next) => {
             })
         else {
             await Service.create(req.body).then(function (service) {
-                res.send(service);
+                // res.send(service);
                 res.status(200).json(" successfully");
             }).catch(next);
         }
