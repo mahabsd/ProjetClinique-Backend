@@ -31,7 +31,7 @@ router.get('/rendezVous/:id', ensureToken, (req, res) => {
         } else {
 
             RendezVous.findById(req.params.id).populate('userRendezVous').exec().then(data => {
-               // res.send();
+                // res.send();
                 res.status(200).json(data);
             }).catch(err => res.status(400).json('Error: ' + err));
         }
@@ -48,7 +48,7 @@ router.put('/rendezVous/update/:id', ensureToken, (req, res) => {
 
         } else {
             RendezVous.findByIdAndUpdate(req.params.id, req.body).then(function () {
-              //  res.send();
+                //  res.send();
                 res.status(200).json(req.body);
             }).catch(err => res.status(400).json('Error: ' + err));
         }
@@ -65,7 +65,7 @@ router.delete('/rendezVous/delete/:id', ensureToken, (req, res) => {
 
         } else {
             RendezVous.findByIdAndDelete(req.params.id).then(() => {
-               // res.send();
+                // res.send();
                 res.status(200).json("rendezVous deleted successfully");
             }).catch(err => res.status(400).json('Error: ' + err));
         }
@@ -74,6 +74,8 @@ router.delete('/rendezVous/delete/:id', ensureToken, (req, res) => {
 })
 //get All rendezVous by ID
 router.get('/getAllRendezVous', ensureToken, (req, res) => {
+
+    let response = [];
     jwt.verify(req.token, process.env.JWT_KEY, (err) => {
         if (err) {
 
@@ -81,8 +83,18 @@ router.get('/getAllRendezVous', ensureToken, (req, res) => {
 
         } else {
             RendezVous.find().populate('userRendezVous').exec().then(function (rendezVous) {
-              //  res.send()
-                res.status(200).json(rendezVous);
+                //  res.send()
+                rendezVous.forEach(element => {
+                    var schedule = {
+                        start: subDays(startOfDay(new Date()), 1),
+                        title: element.title,
+                        color: colors.red,
+                        actions: this.actions
+                    };
+
+                    response.push(schedule);
+                });
+                res.status(200).json(response);
             }).catch(err => res.status(400).json('Error: ' + err));
         }
     });
@@ -90,27 +102,27 @@ router.get('/getAllRendezVous', ensureToken, (req, res) => {
 });
 
 //affect id user for every rendezVous 
-router.put('/affectuserRendezVous/:idUser/:idRendezVous',ensureToken, (req, res) => {
+router.put('/affectuserRendezVous/:idUser/:idRendezVous', ensureToken, (req, res) => {
 
     jwt.verify(req.token, process.env.JWT_KEY, (err) => {
         if (err) {
             res.status(403)
-            console.log( err);
+            console.log(err);
 
-        }else{
+        } else {
             RendezVous.findByIdAndUpdate(req.params.idRendezVous, {
                 $push: {
                     userRendezVous: req.params.idUser
                 }
             }).then((rendezVous) => {
                 res.status(200).json(rendezVous);
-        
+
             }).catch(err => res.status(400).json('Error: ' + err));
         }
 
     });
-    
-   
+
+
 });
 //splice  id user for every rendezVous 
 router.delete('/deleteuserRendezVous/:idUser/:idRendezVous', ensureToken, (req, res) => {
