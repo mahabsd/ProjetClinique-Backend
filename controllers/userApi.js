@@ -5,7 +5,8 @@ const Role = require("../models/role");
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const passport = require('passport');
-const multer  = require('multer');
+const multer = require('multer');
+const path = require('path');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -13,14 +14,14 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         console.log(file);
-        cb(null,file.originalname);
+        cb(null, Date.now() + path.extname(file.originalname));
     }
 });
 const fileFilter = (req, file, cb) => {
     if (file.mimetype == 'image/jpeg' || file.mimetype == 'image/png') {
         cb(null, true);
     } else {
-      
+
         cb(null, false);
     }
 }
@@ -28,32 +29,65 @@ const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 
 //add new user
-router.post('/user/add/',ensureToken, upload.single('image'), (req, res) => {
+router.post('/user/add/', [upload.single('image'), ensureToken], (req, res) => {
 
     jwt.verify(req.token, process.env.JWT_KEY, (err) => {
         if (err) {
             res.status(403)
         } else {
-            console.log(res);
-            // var user = new User(req.body);
-            // bcrypt.hash(req.body.password, 10, function (err, hash) {
-            //     user.password = hash;
-            //  //   user.profile.image = req.profile.image.path
-            //     console.log( user.profile.image );
-            //     user.save().then(item => {
-            //         res.send('hello from server '+req.body);
-            //       //  console.log("data saved " + user.password);
-            //     }).catch(err => {
-            //         console.log(err);
-            //     });
-            // });
+            
+            console.log(req.file);
+            console.log(req.body);
+
+            var user = new User( {
+                username:req.body.username,
+                password: req.body.password,
+                profile: {
+                    name:req.body.profile.name,
+                    surname: req.body.profile.surname,
+                    birthday:  req.body.profile.birthday,
+                    gender: req.body.profile.gender,
+                    image: req.file.path,
+                },
+                work: {
+                    company: req.body.work.company,
+                    roles:  req.body.work.roles,
+                    soldeConge: req.body.work.soldeConge ,
+                },
+                contacts: {
+                    email:req.body.email,
+                    phone:req.body. phone,
+                    address:req.body.address,
+                },
+                social: {
+                    facebook:req.body. facebook,
+                    twitter:req.body.twitter ,
+                    google: req.body.google,
+                },
+                settings: {
+                    registrationDate: req.body.registrationDate,
+                    joinedDate: req.body.joinedDate,
+                    bgColor: req.body.bgColor
+                }
+            });
+
+            bcrypt.hash(req.body.password, 10, function (err, hash) {
+                user.password = hash;
+                //  user.profile.image = req.file.mimetype
+                //  console.log( user.profile.image );
+                user.save().then(item => {
+                    res.send('user added successfully ');
+                }).catch(err => {
+                    console.log(err);
+                });
+            });
         }
     });
 
 });
 
 //get by Id
-router.get('/user/:id',ensureToken, (req, res) => {
+router.get('/user/:id', ensureToken, (req, res) => {
     jwt.verify(req.token, process.env.JWT_KEY, (err) => {
         if (err) {
 
@@ -68,7 +102,7 @@ router.get('/user/:id',ensureToken, (req, res) => {
 });
 
 //delete by Id
-router.delete('/user/delete/:id',ensureToken, (req, res) => {
+router.delete('/user/delete/:id', ensureToken, (req, res) => {
     jwt.verify(req.token, process.env.JWT_KEY, (err) => {
         if (err) {
 
@@ -88,7 +122,7 @@ router.delete('/user/delete/:id',ensureToken, (req, res) => {
 });
 
 //update by Id
-router.put('/user/update/:id',ensureToken, (req, res) => {
+router.put('/user/update/:id', ensureToken, (req, res) => {
 
     jwt.verify(req.token, process.env.JWT_KEY, (err) => {
         if (err) {
@@ -116,7 +150,7 @@ router.put('/user/update/:id',ensureToken, (req, res) => {
 });
 
 //get All users
-router.get('/getAllusers',ensureToken, (req, res) => {
+router.get('/getAllusers', ensureToken, (req, res) => {
 
     jwt.verify(req.token, process.env.JWT_KEY, (err) => {
         if (err) {
@@ -136,13 +170,15 @@ router.get('/getAllusers',ensureToken, (req, res) => {
 //Upload single image and add it to a user
 router.post('/upload/', upload.single('image'), (req, res, next) => {
     console.log(req.file.path);
+    res.status(200).json({ message: "uploaded successfully" });
     // User.findByIdAndUpdate(req.params.idUser, {profile: {image : req.file.path} } ).then(data => {
     //     res.send({success : true, status : 'uploaded successfully'});
     // })
+
 });
 
 //get All users
-router.get('/getAllRoles',ensureToken, (req, res) => {
+router.get('/getAllRoles', ensureToken, (req, res) => {
 
     jwt.verify(req.token, process.env.JWT_KEY, (err) => {
         if (err) {
@@ -162,12 +198,12 @@ router.get('/getAllRoles',ensureToken, (req, res) => {
 router.post('/user/login/', (req, res) => {
 
     User.findOne(
-          {"contacts.email" : req.body.email }, function(err,obj) { console.log(obj); }
-         ).populate('work.roles').then(user => {
+        { "contacts.email": req.body.email }, function (err, obj) { console.log(obj); }
+    ).populate('work.roles').then(user => {
         //if user not exist then return status 400
         if (!user) return res.status(400).json({
             message: "Please verify your e-mail or password."
-         })
+        })
         bcrypt.compare(req.body.password, user.password, (err, data) => {
             //if error than throw error
             if (err) throw err

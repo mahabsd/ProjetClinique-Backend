@@ -12,11 +12,9 @@ var RendezVousSchema = new Schema(
         // actions: { 
         //   default:this.actions}
       },
-        
+      {
+        timestamps: true
 
-        
-      {  timestamps: true
-
-    });
+  });
 
 module.exports = mongoose.model('RendezVous', RendezVousSchema);
