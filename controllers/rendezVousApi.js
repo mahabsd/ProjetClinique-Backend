@@ -74,8 +74,7 @@ router.delete('/rendezVous/delete/:id', ensureToken, (req, res) => {
 })
 //get All rendezVous by ID
 router.get('/getAllRendezVous', ensureToken, (req, res) => {
-
-    let response = [];
+    var response=[];
     jwt.verify(req.token, process.env.JWT_KEY, (err) => {
         if (err) {
 
@@ -83,17 +82,18 @@ router.get('/getAllRendezVous', ensureToken, (req, res) => {
 
         } else {
             RendezVous.find().populate('userRendezVous').exec().then(function (rendezVous) {
-                //  res.send()
-                rendezVous.forEach(element => {
-                    var schedule = {
-                        start: subDays(startOfDay(new Date()), 1),
-                        title: element.title,
-                        color: colors.red,
-                        actions: this.actions
-                    };
-
-                    response.push(schedule);
-                });
+              //  res.send()
+              rendezVous.forEach(element => {
+                var schedule ={
+                    start: element.start,
+                   description: element.descrip,
+                    title:element.title ,
+                     color: element.color,
+                     actions:element.actions
+                  }
+                  response.push(schedule)
+              });
+              
                 res.status(200).json(response);
             }).catch(err => res.status(400).json('Error: ' + err));
         }
