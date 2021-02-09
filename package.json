@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/socket.io": "^2.1.10",
     "bcrypt": "^5.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
@@ -28,7 +29,7 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
-    "socket.io": "^3.1.0",
+    "socket.io": "^2.3.0",
     "time-stamp": "^2.2.0"
   }
 }

@@ -18,12 +18,11 @@ const usersApi = require('./controllers/userApi');
 const actionnairesApi = require("./controllers/actionnaireApi");
 const doctorsApi = require("./controllers/doctorApi");
 const rendezvousApi = require("./controllers/rendezVousApi");
-// const http = require ('http'). createServer (app);
-// const io = require ('socket.io') (http, { 
-//     cors: { 
-//       origins: ['http: // localhost: 4200'] 
-//     } 
-//   }); 
+const Chat = require("./models/chat");
+const http = require('http').Server(app);
+const io = require('socket.io').listen(8080).sockets;
+
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
@@ -39,34 +38,22 @@ app.use('/api/doctors', doctorsApi);
 app.use('/api/rendezvous', rendezvousApi);
 
 
+//Socket io
 
-// send SMS
-const Nexmo = require('nexmo');
+io.on('connection', (socket) => {
+  console.log('user connected');
 
-const nexmo = new Nexmo({
-  apiKey: '6528c0bd',
-  apiSecret: 'wwKlEfAoFKEt22kU',
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+
+  socket.on('new-message', (message) => {
+    console.log('message: ' +message);
+    io.emit('new-message', message);
+  });
 });
-app.post("/api/sms/", (req, res) => {
-    const from = req.body.from;
-    const to = req.body.to;
-    const text = req.body.message;
-    
-    nexmo.message.sendSms(from, to, text);
-    res.status(200).json("hello");
 
-})
-
-
-// //Socket io
-
-// io.on ('connection', (socket) => { 
-//     console.log ('un utilisateur connecté'); 
-//     socket.on ('disconnect', () => { 
-//       console.log ('user disconnected'); 
-//     }) ; 
-//   });
 
 app.listen(port, hostname, () => {
-    console.log("server is running at http://" + hostname + ":" + port);
+  console.log("server is running at http://" + hostname + ":" + port);
 });

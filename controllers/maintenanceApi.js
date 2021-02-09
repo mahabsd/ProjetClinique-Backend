@@ -98,8 +98,8 @@ router.get('/getAllmaintenances',ensureToken, async(req, res) => {
         } else {
             await Maintenance.find({}).then(function (maitenances) {
                 
-                res.send(maitenances)
-                res.status(200).json(" successfully");
+               // res.send()
+                res.status(200).json(maitenances);
             }).catch(err => res.status(400).json('Error: ' + err));
         }
     });
