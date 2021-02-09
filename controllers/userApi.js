@@ -8,6 +8,7 @@ const passport = require('passport');
 const multer = require('multer');
 const path = require('path');
 
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, './img/');
@@ -35,46 +36,25 @@ router.post('/user/add/', [upload.single('image'), ensureToken], (req, res) => {
         if (err) {
             res.status(403)
         } else {
-            
-            console.log(req.file);
-            console.log(req.body);
 
-            var user = new User( {
-                username:req.body.username,
-                password: req.body.password,
-                profile: {
-                    name:req.body.profile.name,
-                    surname: req.body.profile.surname,
-                    birthday:  req.body.profile.birthday,
-                    gender: req.body.profile.gender,
-                    image: req.file.path,
-                },
-                work: {
-                    company: req.body.work.company,
-                    roles:  req.body.work.roles,
-                    soldeConge: req.body.work.soldeConge ,
-                },
-                contacts: {
-                    email:req.body.email,
-                    phone:req.body. phone,
-                    address:req.body.address,
-                },
-                social: {
-                    facebook:req.body. facebook,
-                    twitter:req.body.twitter ,
-                    google: req.body.google,
-                },
-                settings: {
-                    registrationDate: req.body.registrationDate,
-                    joinedDate: req.body.joinedDate,
-                    bgColor: req.body.bgColor
-                }
-            });
+            console.log(JSON.parse(JSON.stringify((req.body))));
 
-            bcrypt.hash(req.body.password, 10, function (err, hash) {
+            var formData = JSON.parse(JSON.stringify((req.body)));
+            console.log(JSON.parse(formData.profile));
+            user = new User({
+                username: JSON.parse(formData.username),
+                password: JSON.parse(formData.password),
+                profile: JSON.parse(formData.profile),
+                work: JSON.parse(formData.work),
+                contacts: JSON.parse(formData.contacts),
+                social: JSON.parse(formData.social),
+                settings: JSON.parse(formData.settings),
+            })
+            if (req.file) {
+                user.profile.image = req.file.path
+            }
+            bcrypt.hash(user.password, 10, function (err, hash) {
                 user.password = hash;
-                //  user.profile.image = req.file.mimetype
-                //  console.log( user.profile.image );
                 user.save().then(item => {
                     res.send('user added successfully ');
                 }).catch(err => {
@@ -122,7 +102,7 @@ router.delete('/user/delete/:id', ensureToken, (req, res) => {
 });
 
 //update by Id
-router.put('/user/update/:id', ensureToken, (req, res) => {
+router.put('/user/update/:id', [upload.single('image'), ensureToken], (req, res) => {
 
     jwt.verify(req.token, process.env.JWT_KEY, (err) => {
         if (err) {
@@ -130,20 +110,49 @@ router.put('/user/update/:id', ensureToken, (req, res) => {
             res.status(403)
 
         } else {
-            bcrypt.hash(req.body.password, 10, function (err, hash) {
-                this.object = req.body;
-                this.object.password = hash;
-                console.log("body   " + this.object.password);
-                req.body = this.object
-                User.findByIdAndUpdate(req.params.id, req.body).then(function (user) {
 
+            var formData = JSON.parse(JSON.stringify((req.body)));
+            user = {
+                username: JSON.parse(formData.username),
+                password: JSON.parse(formData.password),
+                profile: JSON.parse(formData.profile),
+                work: JSON.parse(formData.work),
+                contacts: JSON.parse(formData.contacts),
+                social: JSON.parse(formData.social),
+                settings: JSON.parse(formData.settings),
+            }
+            console.log(user);
+            bcrypt.hash(user.password, 10, function (err, hash) {
+                user.password = hash;
+                if (req.file) {
+                    user.profile.image = req.file.path
+                }
+                User.findByIdAndUpdate(req.params.id, user).then(function (user) {
                     res.status(200).json(
-                        req.body,
+                        { message: "updated successfully" }
                     );
-                    // res.send();
                 }).catch(err => res.status(400).json('Error: ' + err));
             })
+        }
+    });
 
+});
+
+//update by Id without JSON parser
+router.put('/user/updateConge/:id', ensureToken, (req, res) => {
+
+    jwt.verify(req.token, process.env.JWT_KEY, (err) => {
+        if (err) {
+
+            res.status(403)
+
+        } else {
+
+            User.findByIdAndUpdate(req.params.id, req.body).then(function (user) {
+                res.status(200).json(
+                    { message: "updated successfully" }
+                );
+            }).catch(err => res.status(400).json('Error: ' + err));
         }
     });
 
@@ -249,43 +258,5 @@ function ensureToken(req, res, next) {
     }
 };
 
-// sign in with passport
-
-loginWithPassport = (req, res, next) => {
-    return passport.authenticate('local', {
-        session: false
-    }, (err, passportUser, info) => {
-        if (err) {
-            return next(err);
-        }
-
-        if (passportUser) {
-            console.log(passportUser);
-
-            const user = passportUser;
-            const token = jwt.sign({
-                email: passportUser.email,
-                userId: passportUser._id
-            },
-                process.env.JWT_KEY, {
-                expiresIn: "1h"
-            }
-            );
-            user.token = token
-
-            return res.status(200).json({
-                firstName: passportUser.firstName,
-                lastName: passportUser.lastName,
-                email: passportUser.email,
-                token: token
-            });
-        }
-        return res.status(400).json(info);
-    })(req, res, next);
-
-}
-
-
-router.post('/loginWithPassport', loginWithPassport);
 
 module.exports = router;
