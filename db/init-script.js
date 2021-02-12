@@ -91,7 +91,6 @@ Role.count(function (err, count) {
     if (count == 0) {
 
         Role.insertMany(roles).then((rolesDB) => {
-            console.log("roles added successfully");
             // ajouter les users with roles
             User.count(function (err, count) {
                 console.dir(err);
@@ -103,7 +102,6 @@ Role.count(function (err, count) {
                         console.log("helo roleee " + roleDB._id);
                         users.map(user => user.work.roles = roleDB._id)
                         User.insertMany(users).then((users) => {
-                            console.log("users added successfully");
                         }).catch(err => console.log(err))
                     });
                 }

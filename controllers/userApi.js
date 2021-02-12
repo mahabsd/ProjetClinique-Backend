@@ -30,86 +30,56 @@ const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 
 //add new user
-router.post('/user/add/', [upload.single('image'), ensureToken], (req, res) => {
+router.post('/user/add/', [upload.single('image'), passport.authenticate('bearer', { session: false })], (req, res) => {
 
-    jwt.verify(req.token, process.env.JWT_KEY, (err) => {
-        if (err) {
-            res.status(403)
-        } else {
+    console.log(JSON.parse(JSON.stringify((req.body))));
 
-            console.log(JSON.parse(JSON.stringify((req.body))));
-
-            var formData = JSON.parse(JSON.stringify((req.body)));
-            console.log(JSON.parse(formData.profile));
-            user = new User({
-                username: JSON.parse(formData.username),
-                password: JSON.parse(formData.password),
-                profile: JSON.parse(formData.profile),
-                work: JSON.parse(formData.work),
-                contacts: JSON.parse(formData.contacts),
-                social: JSON.parse(formData.social),
-                settings: JSON.parse(formData.settings),
-            })
-            if (req.file) {
-                user.profile.image = req.file.path
-            }
-            bcrypt.hash(user.password, 10, function (err, hash) {
-                user.password = hash;
-                user.save().then(item => {
-                    res.send('user added successfully ');
-                }).catch(err => {
-                    console.log(err);
-                });
-            });
-        }
+    var formData = JSON.parse(JSON.stringify((req.body)));
+    console.log(JSON.parse(formData.profile));
+    user = new User({
+        username: JSON.parse(formData.username),
+        password: JSON.parse(formData.password),
+        profile: JSON.parse(formData.profile),
+        work: JSON.parse(formData.work),
+        contacts: JSON.parse(formData.contacts),
+        social: JSON.parse(formData.social),
+        settings: JSON.parse(formData.settings),
+    })
+    if (req.file) {
+        user.profile.image = req.file.path
+    }
+    bcrypt.hash(user.password, 10, function (err, hash) {
+        user.password = hash;
+        user.save().then(item => {
+            res.send('user added successfully ');
+        }).catch(err => {
+            console.log(err);
+        });
     });
 
 });
 
 //get by Id
-router.get('/user/:id', ensureToken, (req, res) => {
-    jwt.verify(req.token, process.env.JWT_KEY, (err) => {
-        if (err) {
+router.get('/user/:id', passport.authenticate('bearer', { session: false }), (req, res) => {
 
-            res.status(403)
-
-        } else {
             User.findById(req.params.id).populate('work.roles').exec().then(data => {
                 res.status(200).json(data);
             }).catch(err => res.status(400).json('Error: ' + err));
-        }
-    });
 });
 
 //delete by Id
-router.delete('/user/delete/:id', ensureToken, (req, res) => {
-    jwt.verify(req.token, process.env.JWT_KEY, (err) => {
-        if (err) {
-
-            res.status(403)
-
-        } else {
+router.delete('/user/delete/:id', passport.authenticate('bearer', { session: false }), (req, res) => {
 
             User.findByIdAndDelete(
                 req.params.id, req.body).then(function () {
                     res.status(200).json("user deleted successfully");
 
                 }).catch(err => res.status(400).json('Error: ' + err));
-        }
-
-    })
 
 });
 
 //update by Id
-router.put('/user/update/:id', [upload.single('image'), ensureToken], (req, res) => {
-
-    jwt.verify(req.token, process.env.JWT_KEY, (err) => {
-        if (err) {
-
-            res.status(403)
-
-        } else {
+router.put('/user/update/:id', [upload.single('image'), passport.authenticate('bearer', { session: false })], (req, res) => {
 
             var formData = JSON.parse(JSON.stringify((req.body)));
             user = {
@@ -133,47 +103,25 @@ router.put('/user/update/:id', [upload.single('image'), ensureToken], (req, res)
                     );
                 }).catch(err => res.status(400).json('Error: ' + err));
             })
-        }
-    });
-
 });
 
 //update by Id without JSON parser
-router.put('/user/updateConge/:id', ensureToken, (req, res) => {
+router.put('/user/updateConge/:id', passport.authenticate('bearer', { session: false }), (req, res) => {
 
-    jwt.verify(req.token, process.env.JWT_KEY, (err) => {
-        if (err) {
-
-            res.status(403)
-
-        } else {
-
-            User.findByIdAndUpdate(req.params.id, req.body).then(function (user) {
-                res.status(200).json(
-                    { message: "updated successfully" }
-                );
-            }).catch(err => res.status(400).json('Error: ' + err));
-        }
-    });
+    User.findByIdAndUpdate(req.params.id, req.body).then(function (user) {
+        res.status(200).json(
+            { message: "updated successfully" }
+        );
+    }).catch(err => res.status(400).json('Error: ' + err));
 
 });
 
 //get All users
-router.get('/getAllusers', ensureToken, (req, res) => {
+router.get('/getAllusers', passport.authenticate('bearer', { session: false }), (req, res) => {
 
-    jwt.verify(req.token, process.env.JWT_KEY, (err) => {
-        if (err) {
-
-            res.status(403)
-
-        } else {
-            User.find().populate('work.roles').exec().then(function (users) {
-                res.status(200).json(users);
-            }).catch(err => res.status(400).json('Error: ' + err));
-        }
-    });
-
-
+    User.find().populate('work.roles').exec().then(function (users) {
+        res.status(200).json(users);
+    }).catch(err => res.status(400).json('Error: ' + err));
 });
 
 //Upload single image and add it to a user
@@ -187,19 +135,11 @@ router.post('/upload/', upload.single('image'), (req, res, next) => {
 });
 
 //get All users
-router.get('/getAllRoles', ensureToken, (req, res) => {
+router.get('/getAllRoles', passport.authenticate('bearer', { session: false }), (req, res) => {
 
-    jwt.verify(req.token, process.env.JWT_KEY, (err) => {
-        if (err) {
-
-            res.status(403)
-
-        } else {
-            Role.find().exec().then(function (roles) {
-                res.status(200).json(roles);
-            }).catch(err => res.status(400).json('Error: ' + err));
-        }
-    });
+    Role.find().exec().then(function (roles) {
+        res.status(200).json(roles);
+    }).catch(err => res.status(400).json('Error: ' + err));
 
 });
 
@@ -242,21 +182,54 @@ router.post('/user/login/', (req, res) => {
 
 });
 
-//authentification
-function ensureToken(req, res, next) {
-    const bearerHeader = req.headers["authorization"];
-    if (typeof bearerHeader !== "undefined") {
+// sign in with passport
+router.post('/login', (req, res) => {
+    User.findOne({ "contacts.email": req.body.email }).populate('work.roles').then(user => {
+        if (!user) {
+            return res.status(404).json({
+                message: "Email is not found.",
+                success: false
+            });
+        }
+        bcrypt.compare(req.body.password, user.password, (err, result) => {
+            if (err) {
+                return res.status(401).json({
+                    message: "Auth failed."
+                });
+            }
+            if (result) {
+                const token = jwt.sign({
+                    user: user,
+                    _id: user._id,
+                    email: user.email,
+                    roles: user.work.roles,
+                    soldeConge: user.work.soldeConge
+                }, 'RANDOM_TOKEN_SECRET',
+                    {
+                        expiresIn: "1d"
+                    },
+                );
+                return res.status(200).json({
+                    message: "You are Logged In.",
+                    token: token
+                });
+            }
+            res.status(401).json({
+                message: "Auth failed."
+            });
+        });
+    })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
 
-        const bearer = bearerHeader.split(" ");
-        const bearerToken = bearer[1];
-        req.token = bearerToken;
-        next();
 
-    } else {
-        console.log(bearerHeader);
-        res.sendStatus(401);
-    }
-};
+
+
+
 
 
 module.exports = router;

@@ -18,10 +18,15 @@ const usersApi = require('./controllers/userApi');
 const actionnairesApi = require("./controllers/actionnaireApi");
 const doctorsApi = require("./controllers/doctorApi");
 const rendezvousApi = require("./controllers/rendezVousApi");
-const Chat = require("./models/chat");
-const http = require('http').Server(app);
+const chat = require("./controllers/chat");
+const http = require('http');
+const socketIO = require('socket.io');
+app.use('/chat',chat)
+//Socket io
+const server = http.createServer(app);  
+//const io = socketIO(server);
 const io = require('socket.io').listen(8080).sockets;
-
+app.set('io', io);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -38,21 +43,25 @@ app.use('/api/doctors', doctorsApi);
 app.use('/api/rendezvous', rendezvousApi);
 
 
-//Socket io
+//Socket io seulement 
+// io.on('connection', (socket) => {
+//   console.log(socket);
+//   console.log("*********");
+//   console.log(socket.id);
 
-io.on('connection', (socket) => {
-  console.log('user connected');
+//   //for a particualer client
+//   clients[socket.id] = socket;
+//   var socket = clients[socket.id];
+// console.log(clients);
+//   socket.on('disconnect', () => {
+//     console.log('user disconnected');
+//   });
 
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-
-  socket.on('new-message', (message) => {
-    console.log('message: ' +message);
-    io.emit('new-message', message);
-  });
-});
-
+//   socket.on('new-message', (message) => {
+//     console.log('message: ' + message);
+//     io.emit('new-message', message);
+//   });
+// });
 
 app.listen(port, hostname, () => {
   console.log("server is running at http://" + hostname + ":" + port);
