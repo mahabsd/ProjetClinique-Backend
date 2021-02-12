@@ -1,30 +1,16 @@
-const mongoose = require('mongoose');
-const passport = require('passport');
-const LocalStrategy = require('passport-local');
-const bcrypt = require('bcrypt');
-const User = require("../models/user")
+const passport = require("passport");
+const BearerStrategy = require("passport-http-bearer").Strategy;
+const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
-passport.use(new LocalStrategy({
-    
-  usernameField: 'email',
-  passwordField: 'password',
-}, (email, password, done) => {
-    User.findOne({email:email},function(err,doc){
-      
-      if(doc!=null){
-       
-        bcrypt.compare(password, doc.password, function(err, result) {
-            if(result) {
-           
-              return done(null,doc)
-            } else {
-                return done(null, false, { errors: { 'password': 'is invalid' } });
-            } 
-          });
-      }
-    
-      
-  
-  }).catch(done)
-    
-}));
+passport.use(
+  new BearerStrategy(async (token, done) => {
+    const tokenData = await jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    const user = await User.findOne({ _id: tokenData._id });
+    if (!user) {
+      return done(null, false);
+    } else {
+      return done(null, user);
+    }
+  })
+);
