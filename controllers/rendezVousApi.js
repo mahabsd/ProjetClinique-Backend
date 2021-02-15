@@ -49,10 +49,11 @@ router.get('/getAllRendezVous', passport.authenticate('bearer', { session: false
         rendezVous.forEach(element => {
           var schedule ={
               start: element.start,
-             description: element.descrip,
+              description: element.descrip,
               title:element.title ,
                color: element.color,
-               actions:element.actions
+               actions:element.actions,
+               userOwner:element.userOwner
             }
             response.push(schedule)
         });
