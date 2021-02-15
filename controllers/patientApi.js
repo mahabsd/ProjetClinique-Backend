@@ -3,11 +3,9 @@ const router = express.Router();
 const Patient = require("../models/patient")
 const jwt = require("jsonwebtoken");
 const imgModel = require('../models/imageSchema');
+const passport = require('passport');
 
 const multer = require('multer');
-
-
-
 
 
 var storage = multer.diskStorage({
@@ -68,124 +66,52 @@ router.post('/upload', upload.single('images'), async (req, res, next) => {
 
 
 
-router.post('/patient/add/', ensureToken, async (req, res, next) => {
-    jwt.verify(req.token, process.env.JWT_KEY, async (err, data) => {
-        if (err)
-            res.status(403).json({
-                message: "forbidden"
-            })
-        else {
-            await Patient.create(req.body).then(function (patient) {
+router.post('/patient/add/', passport.authenticate('bearer', { session: false }), async (req, res, next) => {
+    await Patient.create(req.body).then(function (patient) {
                 
-                res.status(200).json(patient);
-            }).catch(next);
-        }
-    });
+        res.status(200).json(patient);
+    }).catch(next);
 });
 
 
-router.get('/patient/:id',ensureToken, async(req, res) => {
-    jwt.verify(req.token, process.env.JWT_KEY,async (err) => {
-        if (err) {
-
-            res.status(403).json({
-                message: "forbidden"
-            })
-        } else {
-            await Patient.findOne({ _id: req.params.id }) // key to populate
-            .then(patient=> {
-                // res.json(patient);
-                res.status(200).json(" successfully");
-                // res.send(data); la meme que json(data)
-            }).catch(err => res.status(400).json('Error: ' + err));
-        }
-    });
+router.get('/patient/:id',passport.authenticate('bearer', { session: false }), async(req, res) => {
+    await Patient.findOne({ _id: req.params.id }) // key to populate
+    .then(patient=> {
+        // res.json(patient);
+        res.status(200).json(" successfully");
+        // res.send(data); la meme que json(data)
+    }).catch(err => res.status(400).json('Error: ' + err));
 });
 
 
-router.delete('/patient/delete/:id',ensureToken, async (req, res) => {
-    jwt.verify(req.token, process.env.JWT_KEY, async(err) => {
-        if (err) {
+router.delete('/patient/delete/:id',passport.authenticate('bearer', { session: false }), async (req, res) => {
+    await Patient.findByIdAndRemove({ _id: req.params.id }).then(function (patient) {
+        // res.send(patient);
+        res.status(200).json("deleted successfully");
 
-            
-            res.status(403).json({
-                message: "forbidden"
-            })
+        }).catch(err => res.status(400).json('Error: ' + err));
 
-        } else {
+});
 
-            await Patient.findByIdAndRemove({ _id: req.params.id }).then(function (patient) {
-                // res.send(patient);
-                res.status(200).json("deleted successfully");
 
-                }).catch(err => res.status(400).json('Error: ' + err));
-        }
+router.put('/patient/update/:id',passport.authenticate('bearer', { session: false }), async(req, res) => {
 
+    await Patient.findByIdAndUpdate({ _id: req.params.id }, req.body).then(async () => {
+        await Patient.findOne({ _id: req.params.id }).then(function (patient) {
+            // res.send(patient);
+            res.status(200).json("successfully");
+        }).catch(err => res.status(400).json('Error: ' + err));
     })
 
 });
 
 
-router.put('/patient/update/:id',ensureToken, async(req, res) => {
+router.get('/getAllpatients',passport.authenticate('bearer', { session: false }), async(req, res) => {
 
-    jwt.verify(req.token, process.env.JWT_KEY, async(err) => {
-        if (err) {
-
-            res.status(403).json({
-                message: "forbidden"
-            })
-
-        } else {
-            await Patient.findByIdAndUpdate({ _id: req.params.id }, req.body).then(async () => {
-                await Patient.findOne({ _id: req.params.id }).then(function (patient) {
-                    // res.send(patient);
-                    res.status(200).json("successfully");
-                }).catch(err => res.status(400).json('Error: ' + err));
-            })
-
-        }
-    });
-
-});
-
-
-router.get('/getAllpatients',ensureToken, async(req, res) => {
-
-    jwt.verify(req.token, process.env.JWT_KEY, async(err) => {
-        if (err) {
-
-            res.status(403).json({
-                message: "forbidden"
-            })
-
-        } else {
-            await Patient.find({}).then(function (patients) {
+    await Patient.find({}).then(function (patients) {    
                 
-                
-                res.status(200).json(patients);
-            }).catch(err => res.status(400).json('Error: ' + err));
-        }
-    });
-
-
+        res.status(200).json(patients);
+    }).catch(err => res.status(400).json('Error: ' + err));
 });
-
-
-
-
-function ensureToken(req, res, next) {
-    const bearerHeader = req.headers["authorization"];
-    if (typeof bearerHeader !== "undefined") {
-
-        const bearer = bearerHeader.split(" ");
-        const bearerToken = bearer[1];
-        req.token = bearerToken;
-        next();
-
-    } else {
-        console.log(bearerHeader);
-        res.sendStatus(401);
-    }
-};
 
 module.exports = router;

@@ -28,6 +28,16 @@ const smsApi = require("./controllers/smsApi");
 //       origins: ['http: // localhost: 4200'] 
 //     } 
 //   }); 
+const chat = require("./controllers/chat");
+const http = require('http');
+const socketIO = require('socket.io');
+app.use('/chat',chat)
+//Socket io
+const server = http.createServer(app);  
+//const io = socketIO(server);
+const io = require('socket.io').listen(8080).sockets;
+app.set('io', io);
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
@@ -44,34 +54,26 @@ app.use('/api/rendezvous', rendezvousApi);
 app.use('/api/smsing', smsApi);
 
 
+//Socket io seulement 
+// io.on('connection', (socket) => {
+//   console.log(socket);
+//   console.log("*********");
+//   console.log(socket.id);
 
-// send SMS
-// const Nexmo = require('nexmo');
-
-// const nexmo = new Nexmo({
-//   apiKey: '6528c0bd',
-//   apiSecret: 'wwKlEfAoFKEt22kU',
-// });
-// app.post("/api/sms/", (req, res) => {
-//     const from = req.body.from;
-//     const to = req.body.to;
-//     const text = req.body.message;
-    
-//     nexmo.message.sendSms(from, to, text);
-//     res.status(200).json("hello");
-
-// })
-
-
-// //Socket io
-
-// io.on ('connection', (socket) => { 
-//     console.log ('un utilisateur connecté'); 
-//     socket.on ('disconnect', () => { 
-//       console.log ('user disconnected'); 
-//     }) ; 
+//   //for a particualer client
+//   clients[socket.id] = socket;
+//   var socket = clients[socket.id];
+// console.log(clients);
+//   socket.on('disconnect', () => {
+//     console.log('user disconnected');
 //   });
 
+//   socket.on('new-message', (message) => {
+//     console.log('message: ' + message);
+//     io.emit('new-message', message);
+//   });
+// });
+
 app.listen(port, hostname, () => {
-    console.log("server is running at http://" + hostname + ":" + port);
+  console.log("server is running at http://" + hostname + ":" + port);
 });
