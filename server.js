@@ -19,14 +19,7 @@ const actionnairesApi = require("./controllers/actionnaireApi");
 const doctorsApi = require("./controllers/doctorApi");
 const rendezvousApi = require("./controllers/rendezVousApi");
 const chat = require("./controllers/chat");
-const http = require('http');
-const socketIO = require('socket.io');
-app.use('/chat',chat)
-//Socket io
-const server = http.createServer(app);  
-//const io = socketIO(server);
-const io = require('socket.io').listen(8080).sockets;
-app.set('io', io);
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -42,7 +35,11 @@ app.use('/api/actionnaires', actionnairesApi);
 app.use('/api/doctors', doctorsApi);
 app.use('/api/rendezvous', rendezvousApi);
 
-
+const http = require('http');
+app.use('/chat',chat)
+//const server = http.createServer(app);  
+const io = require('socket.io').listen(8080).sockets;
+app.set('io', io);
 //Socket io seulement 
 // io.on('connection', (socket) => {
 //   console.log(socket);

@@ -28,7 +28,6 @@ const fileFilter = (req, file, cb) => {
 }
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-
 //add new user
 router.post('/user/add/', [upload.single('image'), passport.authenticate('bearer', { session: false })], (req, res) => {
 
