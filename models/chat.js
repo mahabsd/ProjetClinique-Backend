@@ -5,11 +5,12 @@ var privateChat = new  Schema({
     candidat1:{type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     candidat2:{type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     messages:[ {
-        content: String,
-        logo : String,
+        content: {type: String},
+        logo : {type: String},
         candidat: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
         name : {type: String ,default :""},
         createdDate: {type: Date, default: Date.now()}
+    
 }]
 });
 

@@ -30,14 +30,7 @@ const smsApi = require("./controllers/smsApi");
 //     } 
 //   }); 
 const chat = require("./controllers/chat");
-const http = require('http');
-const socketIO = require('socket.io');
-app.use('/chat',chat)
-//Socket io
-const server = http.createServer(app);  
-//const io = socketIO(server);
-const io = require('socket.io').listen(8080).sockets;
-app.set('io', io);
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -54,7 +47,11 @@ app.use('/api/doctors', doctorsApi);
 app.use('/api/rendezvous', rendezvousApi);
 app.use('/api/smsing', smsApi);
 
-
+const http = require('http');
+app.use('/chat',chat)
+//const server = http.createServer(app);  
+const io = require('socket.io').listen(8080).sockets;
+app.set('io', io);
 //Socket io seulement 
 // io.on('connection', (socket) => {
 //   console.log(socket);
