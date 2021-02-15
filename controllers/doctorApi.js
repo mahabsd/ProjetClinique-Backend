@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Doctor = require("../models/doctor")
-const jwt = require("jsonwebtoken");
 const passport = require('passport');
 
 router.post('/doctor/add', passport.authenticate('bearer', { session: false }), (req, res) => {

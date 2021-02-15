@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Maintenance = require("../models/maitenance")
-const jwt = require("jsonwebtoken");
 const passport = require('passport');
 
 
