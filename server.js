@@ -4,6 +4,9 @@ require('./db/connect');
 require('./db/init-script');
 require('./config/passport');
 require('./controllers/soldeConge');
+require('./controllers/smsAuto');
+require('request');
+
 
 const hostname = "127.0.0.1";
 const port = 3000;
@@ -18,6 +21,13 @@ const usersApi = require('./controllers/userApi');
 const actionnairesApi = require("./controllers/actionnaireApi");
 const doctorsApi = require("./controllers/doctorApi");
 const rendezvousApi = require("./controllers/rendezVousApi");
+const smsApi = require("./controllers/smsApi");
+// const http = require ('http'). createServer (app);
+// const io = require ('socket.io') (http, { 
+//     cors: { 
+//       origins: ['http: // localhost: 4200'] 
+//     } 
+//   }); 
 const chat = require("./controllers/chat");
 const http = require('http');
 const socketIO = require('socket.io');
@@ -41,6 +51,7 @@ app.use('/api/img', express.static('img'));
 app.use('/api/actionnaires', actionnairesApi);
 app.use('/api/doctors', doctorsApi);
 app.use('/api/rendezvous', rendezvousApi);
+app.use('/api/smsing', smsApi);
 
 
 //Socket io seulement 

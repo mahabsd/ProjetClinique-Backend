@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const express = require('express');
 const router = express.Router();
+var passport = require('passport');
 
 // create reusable transporter object using the default SMTP transport
 var transporter = nodemailer.createTransport("SMTP", {
@@ -15,14 +16,8 @@ var transporter = nodemailer.createTransport("SMTP", {
 });
 
 //add new user
-router.post('/sendmail', ensureToken,  (req, res) => {
+router.post('/sendmail', passport.authenticate('bearer', { session: false }),  (req, res) => {
 
-    jwt.verify(req.token, process.env.JWT_KEY, (err) => {
-        if (err) {
-
-            res.status(403)
-
-        } else {
                     var mailOptions = {
                         from:  '****@gmail.com' ,
                         to: req.body.emailreceiver,
@@ -36,12 +31,7 @@ router.post('/sendmail', ensureToken,  (req, res) => {
                         }
                         return res.send("data saved ");
                     });
-                  
-            }
-            // setup e-mail data with unicode symbols
-            
-    });
-
+          
 });
 
 //authentification
