@@ -7,11 +7,12 @@ const cron = require('node-cron');
 
 const Patient = require("../models/patient");
 const Doctor = require("../models/doctor");
+const passport = require('passport');
 
 
 
 
-router.get('/smssend',ensureToken,async (req,res, next) => {
+router.get('/smssend',passport.authenticate('bearer', { session: false }),async (req,res, next) => {
 
    await request("https://api.1s2u.io/bulksms?username=smsrajebkam021&password=web47720&mt=0&fl=0&sid=CliniqueOkba&mno=21624658683&msg=mesageetest", function (error, response, body) {
         console.error('error:', error); // Print the error if one occurred
@@ -21,122 +22,56 @@ router.get('/smssend',ensureToken,async (req,res, next) => {
       });
   });
   
-router.post('/sms/add/', ensureToken, async (req, res, next) => {
-    jwt.verify(req.token, process.env.JWT_KEY, async (err, data) => {
-        if (err)
-            res.status(403).json({
-                message: "forbidden"
-            })
-        else {
-            await Sms.create(req.body).then(function (sms) {
+router.post('/sms/add/', passport.authenticate('bearer', { session: false }), async (req, res, next) => {
+    await Sms.create(req.body).then(function (sms) {
                 
-                res.status(200).json(sms);
-            }).catch(next);
-        }
-    });
+        res.status(200).json(sms);
+    }).catch(next);
 });
 
 
-router.get('/sms/:id',ensureToken, async(req, res) => {
-    jwt.verify(req.token, process.env.JWT_KEY,async (err) => {
-        if (err) {
-
-            res.status(403).json({
-                message: "forbidden"
-            })
-        } else {
-            await Sms.findOne({ _id: req.params.id }) // key to populate
-            .then(sms=> {
-                // res.json(sms);
-                res.status(200).json(" successfully");
-                // res.send(data); la meme que json(data)
-            }).catch(err => res.status(400).json('Error: ' + err));
-        }
-    });
+router.get('/sms/:id',passport.authenticate('bearer', { session: false }), async(req, res) => {
+    await Sms.findOne({ _id: req.params.id }) // key to populate
+    .then(sms=> {
+        // res.json(sms);
+        res.status(200).json(" successfully");
+        // res.send(data); la meme que json(data)
+    }).catch(err => res.status(400).json('Error: ' + err));
 });
 
 
-router.delete('/sms/delete/:id',ensureToken, async (req, res) => {
-    jwt.verify(req.token, process.env.JWT_KEY, async(err) => {
-        if (err) {
+router.delete('/sms/delete/:id',passport.authenticate('bearer', { session: false }), async (req, res) => {
+    await Sms.findByIdAndRemove({ _id: req.params.id }).then(function (sms) {
+        // res.send(sms);
+        res.status(200).json("deleted successfully");
 
-            
-            res.status(403).json({
-                message: "forbidden"
-            })
+        }).catch(err => res.status(400).json('Error: ' + err));
 
-        } else {
+});
 
-            await Sms.findByIdAndRemove({ _id: req.params.id }).then(function (sms) {
-                // res.send(sms);
-                res.status(200).json("deleted successfully");
 
-                }).catch(err => res.status(400).json('Error: ' + err));
-        }
+router.put('/sms/update/:id',passport.authenticate('bearer', { session: false }), async(req, res) => {
 
+    await Sms.findByIdAndUpdate({ _id: req.params.id }, req.body).then(async () => {
+        await Sms.findOne({ _id: req.params.id }).then(function (sms) {
+            // res.send(sms);
+            res.status(200).json("successfully");
+        }).catch(err => res.status(400).json('Error: ' + err));
     })
 
 });
 
 
-router.put('/sms/update/:id',ensureToken, async(req, res) => {
+router.get('/getAllsmss',passport.authenticate('bearer', { session: false }), async(req, res) => {
 
-    jwt.verify(req.token, process.env.JWT_KEY, async(err) => {
-        if (err) {
-
-            res.status(403).json({
-                message: "forbidden"
-            })
-
-        } else {
-            await Sms.findByIdAndUpdate({ _id: req.params.id }, req.body).then(async () => {
-                await Sms.findOne({ _id: req.params.id }).then(function (sms) {
-                    // res.send(sms);
-                    res.status(200).json("successfully");
-                }).catch(err => res.status(400).json('Error: ' + err));
-            })
-
-        }
-    });
-
-});
-
-
-router.get('/getAllsmss',ensureToken, async(req, res) => {
-
-    jwt.verify(req.token, process.env.JWT_KEY, async(err) => {
-        if (err) {
-
-            res.status(403).json({
-                message: "forbidden"
-            })
-
-        } else {
-            await Sms.find({}).populate('userOwner').then(function (smss) {
+    await Sms.find({}).populate('userOwner').then(function (smss) {
                 
                 
-                res.status(200).json(smss);
-            }).catch(err => res.status(400).json('Error: ' + err));
-        }
-    });
+        res.status(200).json(smss);
+    }).catch(err => res.status(400).json('Error: ' + err));
 
 
 });
-
-function ensureToken(req, res, next) {
-    const bearerHeader = req.headers["authorization"];
-    if (typeof bearerHeader !== "undefined") {
-
-        const bearer = bearerHeader.split(" ");
-        const bearerToken = bearer[1];
-        req.token = bearerToken;
-        next();
-
-    } else {
-        console.log(bearerHeader);
-        res.sendStatus(401);
-    }
-};
 
 cron.schedule('*/1 * * * *', function (res) {
 
@@ -210,8 +145,8 @@ cron.schedule('*/1 * * * *', function (res) {
                     }
                 });
             });
-            Patient.find().then((user) => {
-                Patient.forEach(element => {
+            Patient.find().then((patient) => {
+                patient.forEach(element => {
                     let date = new Date(Date.now()) ;
                     date1=new Date(Date.parse(element.profile.birthday));  
                      if ((parseInt(date1.getDate(),10)-parseInt(date.getDate(),10)===3 && 
