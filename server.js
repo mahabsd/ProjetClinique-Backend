@@ -4,6 +4,9 @@ require('./db/connect');
 require('./db/init-script');
 require('./config/passport');
 require('./controllers/soldeConge');
+require('./controllers/smsAuto');
+require('request');
+
 
 const hostname = "127.0.0.1";
 const port = 3000;
@@ -18,6 +21,7 @@ const usersApi = require('./controllers/userApi');
 const actionnairesApi = require("./controllers/actionnaireApi");
 const doctorsApi = require("./controllers/doctorApi");
 const rendezvousApi = require("./controllers/rendezVousApi");
+const smsApi = require("./controllers/smsApi");
 // const http = require ('http'). createServer (app);
 // const io = require ('socket.io') (http, { 
 //     cors: { 
@@ -37,25 +41,26 @@ app.use('/api/img', express.static('img'));
 app.use('/api/actionnaires', actionnairesApi);
 app.use('/api/doctors', doctorsApi);
 app.use('/api/rendezvous', rendezvousApi);
+app.use('/api/smsing', smsApi);
 
 
 
 // send SMS
-const Nexmo = require('nexmo');
+// const Nexmo = require('nexmo');
 
-const nexmo = new Nexmo({
-  apiKey: '6528c0bd',
-  apiSecret: 'wwKlEfAoFKEt22kU',
-});
-app.post("/api/sms/", (req, res) => {
-    const from = req.body.from;
-    const to = req.body.to;
-    const text = req.body.message;
+// const nexmo = new Nexmo({
+//   apiKey: '6528c0bd',
+//   apiSecret: 'wwKlEfAoFKEt22kU',
+// });
+// app.post("/api/sms/", (req, res) => {
+//     const from = req.body.from;
+//     const to = req.body.to;
+//     const text = req.body.message;
     
-    nexmo.message.sendSms(from, to, text);
-    res.status(200).json("hello");
+//     nexmo.message.sendSms(from, to, text);
+//     res.status(200).json("hello");
 
-})
+// })
 
 
 // //Socket io
