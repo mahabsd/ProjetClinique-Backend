@@ -4,7 +4,7 @@ const Actionnaire = require("../models/actionnaire")
 const jwt = require("jsonwebtoken");
 var passport = require('passport');
 
-router.post('/actionnaire/add', passport.authenticate('bearer', { session: false }), (req, res) => {
+router.post('/actionnaire/add', passport.authenticate('bearer', { session: false }),async (req, res) => {
 
 
     var actionnaire = new Actionnaire(req.body);
@@ -18,8 +18,7 @@ router.post('/actionnaire/add', passport.authenticate('bearer', { session: false
 });
 
 //get actionnaire by ID
-router.get('/actionnaire/:id', epassport.authenticate('bearer', { session: false }), (req, res) => {
-    
+router.get('/actionnaire/:id', passport.authenticate('bearer', { session: false }),async (req, res) => {
     
 
           await  Actionnaire.findById(req.params.id).populate('userActionnaire').exec().then(data => {
@@ -31,7 +30,7 @@ router.get('/actionnaire/:id', epassport.authenticate('bearer', { session: false
 });
 
 //update actionnaire by ID
-router.put('/actionnaire/update/:id',passport.authenticate('bearer', { session: false }) ,(req, res) => {
+router.put('/actionnaire/update/:id',passport.authenticate('bearer', { session: false }) ,async(req, res) => {
     
            await Actionnaire.findByIdAndUpdate(req.params.id, req.body).then(function () {
                 // res.send();
@@ -42,7 +41,7 @@ router.put('/actionnaire/update/:id',passport.authenticate('bearer', { session: 
 })
 
 //delete actionnaire by ID
-router.delete('/actionnaire/delete/:id', passport.authenticate('bearer', { session: false }), (req, res) => {
+router.delete('/actionnaire/delete/:id', passport.authenticate('bearer', { session: false }), async(req, res) => {
   
           await  Actionnaire.findByIdAndDelete(req.params.id).then(() => {
                 res.send();
@@ -53,7 +52,7 @@ router.delete('/actionnaire/delete/:id', passport.authenticate('bearer', { sessi
 //get All actionnaire by ID
 router.get('/getAllActionnaires', passport.authenticate('bearer', { session: false }), (req, res) => {
    
-          await  Actionnaire.find().populate('userActionnaire').exec().then(function (actionnaire) {
+          await  Actionnaire.find().populate('userActionnaire').exec().then(async function (actionnaire) {
                 // res.send()
                 res.status(200).json(actionnaire);
             }).catch(err => res.status(400).json('Error: ' + err));
@@ -62,7 +61,7 @@ router.get('/getAllActionnaires', passport.authenticate('bearer', { session: fal
 });
 
 //affect id user for every actionnaire 
-router.put('/affectuserActionnaire/:idUser/:idActionnaire', passport.authenticate('bearer', { session: false }), (req, res) => {
+router.put('/affectuserActionnaire/:idUser/:idActionnaire', passport.authenticate('bearer', { session: false }),async (req, res) => {
 
   
            await Actionnaire.findByIdAndUpdate(req.params.idActionnaire, {
@@ -77,7 +76,7 @@ router.put('/affectuserActionnaire/:idUser/:idActionnaire', passport.authenticat
 
 });
 //splice  id user for every actionnaire 
-router.delete('/deleteuserActionnaire/:idUser/:idActionnaire', passport.authenticate('bearer', { session: false }), (req, res) => {
+router.delete('/deleteuserActionnaire/:idUser/:idActionnaire', passport.authenticate('bearer', { session: false }),async (req, res) => {
    
            await Actionnaire.findByIdAndUpdate(req.params.idActionnaire, {
                 $pull: {
@@ -89,19 +88,6 @@ router.delete('/deleteuserActionnaire/:idUser/:idActionnaire', passport.authenti
       
 
 });
-//authentification
-function ensureToken(req, res, next) {
-    const bearerHeader = req.headers["authorization"];
-    if (typeof bearerHeader !== "undefined") {
 
-        const bearer = bearerHeader.split(" ");
-        const bearerToken = bearer[1];
-        req.token = bearerToken;
-        next();
 
-    } else {
-        console.log(bearerHeader);
-        res.sendStatus(401);
-    }
-};
 module.exports = router;

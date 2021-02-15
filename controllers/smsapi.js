@@ -7,6 +7,7 @@ const cron = require('node-cron');
 
 const Patient = require("../models/patient");
 const Doctor = require("../models/doctor");
+const patient = require('../models/patient');
 
 
 
@@ -138,7 +139,7 @@ function ensureToken(req, res, next) {
     }
 };
 
-cron.schedule('*/1 * * * *', function (res) {
+cron.schedule('*/5 * * * *', function (res) {
 
 
 
@@ -210,8 +211,8 @@ cron.schedule('*/1 * * * *', function (res) {
                     }
                 });
             });
-            Patient.find().then((user) => {
-                Patient.forEach(element => {
+            Patient.find().then((patient) => {
+                patient.forEach(element => {
                     let date = new Date(Date.now()) ;
                     date1=new Date(Date.parse(element.profile.birthday));  
                      if ((parseInt(date1.getDate(),10)-parseInt(date.getDate(),10)===3 && 

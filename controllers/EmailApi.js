@@ -34,21 +34,7 @@ router.post('/sendmail', passport.authenticate('bearer', { session: false }),  (
           
 });
 
-//authentification
-function ensureToken(req, res, next) {
-    const bearerHeader = req.headers["authorization"];
-    if (typeof bearerHeader !== "undefined") {
 
-        const bearer = bearerHeader.split(" ");
-        const bearerToken = bearer[1];
-        req.token = bearerToken;
-        next();
-
-    } else {
-        console.log(bearerHeader);
-        res.sendStatus(401);
-    }
-};
 
 
 module.exports = router;
