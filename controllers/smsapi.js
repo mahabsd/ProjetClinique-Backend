@@ -5,17 +5,14 @@ const Sms = require("../models/sms")
 const jwt = require("jsonwebtoken");
 const cron = require('node-cron');
 const passport = require('passport');
-
 const Patient = require("../models/patient");
 const Doctor = require("../models/doctor");
 const patient = require('../models/patient');
 
 
-
-
-router.get('/smssend', passport.authenticate('bearer', { session: false }), async (req, res, next) => {
-
-    await request("https://api.1s2u.io/bulksms?username=smsnidhal15020&password=web55023&mt=0&fl=0&sid=CliniqueOkba&mno=21624658683&msg=mesageetest", function (error, response, body) {
+router.get('/smssend/:lang/:phone/:message', passport.authenticate('bearer', { session: false }), async (req, res) => {
+    console.log(req);
+    await request(`https://api.1s2u.io/bulksms?username=smsnidhal15020&password=web55023&mt=0&fl=${req.params.lang}&sid=CliniqueOkba&mno=${req.params.phone}&msg=${req.params.message}`, function (error, response, body) {
         console.error('error:', error); // Print the error if one occurred
         console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         console.log('body:', body); // Print the HTML for the Google homepage.
