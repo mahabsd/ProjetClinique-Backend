@@ -9,41 +9,39 @@ const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './uploads')
     },
-    filename: async function  (req, file, cb) {
+    filename: async function (req, file, cb) {
         const fileName = Date.now() + path.extname(file.originalname);
         const chat = await Chat.findById(req.params.idChat);
         const io = req.app.get('io');
         const filePath = "http://localhost:3000/uploads/" + fileName;
         console.log(req.body.logo);
-        const message ={
-            logo : req.body.logo,
+        const message = {
+            logo: req.body.logo,
             candidat: req.body.candidat,
             files: [filePath]
         }
         const chat2 = await Chat.findByIdAndUpdate(chat._id, { $push: { messages: message } })
-        io.emit('newMessageSended', chat2);    
+        io.emit('newMessageSended', chat2);
         cb(null, fileName)
     }
 })
 const upload = multer({ storage: storage });
 
 router.post('/sendMessage/:idChat', [upload.array('myFiles', 12), passport.authenticate('bearer', { session: false })], async (req, res) => {
-  
-    if(req.body.content !== null && req.body.content !== undefined)
-   {
+    console.log(req.body.logo);
+    if ((req.body.content !== null && req.body.content !== undefined)||(req.file != 0)) {
         const chat = await Chat.findById(req.params.idChat);
         const io = req.app.get('io');
-        const message ={
+        const message = {
             content: req.body.content,
-            logo : req.body.logo,
+            logo: req.body.logo,
             candidat: req.body.candidat,
-            name : req.body.name,
         }
         const chat2 = await Chat.findByIdAndUpdate(chat._id, { $push: { messages: message } })
         io.emit('newMessageSended', chat2);
-   }
+    }
 
-    res.json({message: 'sent'})
+    res.json({ message: 'sent' })
 });
 
 router.get('/getPrivateMessage/:idCandidat1/:idCandidat2', passport.authenticate('bearer', { session: false }), function (req, res) {
