@@ -8,6 +8,7 @@ var RendezVousSchema = new Schema(
     userOwner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     start: Date,
     isEdit: { type: String },
+    notifications : {type :Boolean, default : false},
     // // color: {default:colors.red},
     // actions: { 
     //   default:this.actions}
