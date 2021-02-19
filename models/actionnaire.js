@@ -9,7 +9,8 @@ var actionnaireSchema = new Schema(
         name: { type: String },
         surname: { type: String },
         birthday: { type: String },
-        image: { type: String },
+        image: { type: String,
+        default:"assets/img/users/default-user.jpg" },
     },
     work: {
         position: { type: String },
