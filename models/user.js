@@ -12,7 +12,7 @@ var userSchema = new Schema(
             birthday: { type: String },
             gender: { type: String },
             image: { type: String },
-            cin: { type: String },
+            
         },
         work: {
             company: { type: String },
