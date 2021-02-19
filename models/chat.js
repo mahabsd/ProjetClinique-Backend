@@ -9,9 +9,11 @@ var privateChat = new  Schema({
         logo : {type: String},
         candidat: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
         name : {type: String ,default :""},
-        createdDate: {type: Date, default: Date.now()}
-    
-}]
+        createdDate: {type: Date, default: Date.now()},
+        files:[],
+        notifications : {type :Boolean, default : false},
+
+    }]
 });
 
 module.exports = mongoose.model('privateChat', privateChat);

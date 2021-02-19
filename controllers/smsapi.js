@@ -73,7 +73,7 @@ router.get('/getAllsmss',passport.authenticate('bearer', { session: false }), as
 
 });
 
-cron.schedule('*/1 * * * *', function (res) {
+cron.schedule('*/5 * * * *', function (res) {
 
 
 
@@ -187,7 +187,7 @@ cron.schedule('*/1 * * * *', function (res) {
                                 },
                                 userOwner: element._id,
                            }
-                        
+                    
                         Sms.create(message).then(function (sms) {
                 
                             res.status(200).json(sms);

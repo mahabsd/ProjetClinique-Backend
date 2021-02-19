@@ -9,8 +9,10 @@ var maintenanceSchema = new Schema(
         statut: { type: String ,
                  default:"pending"
         },
+        notifications : {type :Boolean, default : false},
         userOwner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }} ,
         {timestamps: { currentTime: () => Date.now() }}
+        
     );
 
 module.exports = mongoose.model('Maitenance', maintenanceSchema);

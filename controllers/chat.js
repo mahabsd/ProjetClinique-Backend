@@ -2,15 +2,45 @@ var express = require('express');
 var router = express.Router();
 var Chat = require('../models/chat');
 var passport = require('passport');
+const multer = require('multer');
 
+const path = require('path');
+const { json } = require('body-parser');
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './uploads')
+    },
+    filename: async function  (req, file, cb) {
+        const fileName = Date.now()+path.extname(file.originalname);
+        console.log(fileName);
+        const chat = await Chat.findById(req.params.idChat);
+        const io = req.app.get('io');
+        const filePath = "http://localhost:3000/uploads/" + fileName;
+        var message ={
+            logo : req.body.logo,
+            candidat: req.body.candidat,
+            files: [filePath]
+        }
+        const chat2 = await Chat.findByIdAndUpdate(chat._id, { $push: { messages: message } })
+        io.emit('newMessageSended', chat2);    
+        cb(null, fileName)
+    }
+})
+var upload = multer({ storage: storage });
 
-router.post('/sendMessage/:idChat', passport.authenticate('bearer', { session: false }), async (req, res) => {
-    const chat = await Chat.findById(req.params.idChat).exec()
+router.post('/sendMessage/:idChat', [upload.array('myFiles', 12), passport.authenticate('bearer', { session: false })], async (req, res) => {
+    const chat = await Chat.findById(req.params.idChat);
     const io = req.app.get('io');
-    const chat2 = await Chat.findByIdAndUpdate(chat._id, { $push: { messages: req.body } })
+    var message ={
+        content: req.body.content,
+        logo : req.body.logo,
+        candidat: req.body.candidat,
+        name : req.body.name,
+    }
+    const chat2 = await Chat.findByIdAndUpdate(chat._id, { $push: { messages: message } })
     io.emit('newMessageSended', chat2);
+
     res.send('sent')
-    console.log(req.body);
 });
 
 router.get('/getPrivateMessage/:idCandidat1/:idCandidat2', passport.authenticate('bearer', { session: false }), function (req, res) {
@@ -56,4 +86,16 @@ router.get('/deleteChat/:chatId/', passport.authenticate('bearer', { session: fa
 
 })
 
+//Uploading multiple files
+router.post('/uploadmultiple', upload.single('myFiles', 12), (req, res, next) => {
+    const files = req.files
+    if (!files) {
+        const error = new Error('Please choose files')
+        error.httpStatusCode = 400
+        return next(error)
+    }
+
+    res.send(files)
+
+})
 module.exports = router;

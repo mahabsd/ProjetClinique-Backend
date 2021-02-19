@@ -15,6 +15,7 @@ var smsSchema = new Schema(
         type: { type: Number },
         message: { type: String },
         },
+        notifications : {type :Boolean, default : false},
         userOwner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }},
         {timestamps: { currentTime: () => Date.now()  }}
     );

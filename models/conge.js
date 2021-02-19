@@ -8,6 +8,7 @@ var congeSchema = new Schema(
         dateFin: { type: Date },
         motif: { type: String },
         status: { type: String },
+        notifications : {type :Boolean, default : false},
         userOwner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }},
         {timestamps: { currentTime: () => Date.now()  }}
     );
