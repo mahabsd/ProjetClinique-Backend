@@ -57,5 +57,4 @@ router.get('/getAllmaintenances',passport.authenticate('bearer', { session: fals
 
 
 
-
 module.exports = router;

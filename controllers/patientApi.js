@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Patient = require("../models/patient")
-const jwt = require("jsonwebtoken");
+
 const imgModel = require('../models/imageSchema');
 const passport = require('passport');
 
