@@ -51,7 +51,7 @@ router.get('/getAllActionnaires',  passport.authenticate('bearer', { session: fa
 });
 
 //affect id user for every actionnaire 
-router.put('/affectuserActionnaire/:idUser/:idActionnaire', passport.authenticate('bearer', { session: false }), (req, res) => {
+router.put('/affectuserActionnaire/:idUser/:idActionnaire', passport.authenticate('bearer', { session: false }),async (req, res) => {
 
     Actionnaire.findByIdAndUpdate(req.params.idActionnaire, {
         $push: {
