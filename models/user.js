@@ -24,11 +24,11 @@ var userSchema = new Schema(
             phone: { type: String },
             address: { type: String },
         },
-        social: {
-            facebook: { type: String },
-            twitter: { type: String },
-            google: { type: String },
-        },
+        // social: {
+        //     facebook: { type: String },
+        //     twitter: { type: String },
+        //     google: { type: String },
+        // },
         settings: {
             status: { type: String },
             // isActive: { type: Boolean },

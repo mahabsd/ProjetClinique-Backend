@@ -20,9 +20,10 @@ const usersApi = require('./controllers/userApi');
 const actionnairesApi = require("./controllers/actionnaireApi");
 const doctorsApi = require("./controllers/doctorApi");
 const rendezvousApi = require("./controllers/rendezVousApi");
-const smsApi = require("./controllers/smsApi");
+//const smsApi = require("./controllers/smsApi");
 const chat = require("./controllers/chat");
 const notif = require('./controllers/notifications')
+const todo = require('./controllers/todoApi')
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -35,11 +36,12 @@ app.use('/api/services', serviceApi);
 app.use('/api/maintenances', maintenanceApi);
 app.use('/api/img', express.static('img'));
 app.use('/uploads', express.static('uploads'));
-
 app.use('/api/actionnaires', actionnairesApi);
 app.use('/api/doctors', doctorsApi);
 app.use('/api/rendezvous', rendezvousApi);
-app.use('/api/smsing', smsApi);
+app.use('/api/todos', todo);
+
+//app.use('/api/smsing', smsApi);
 
 app.use('/notif', notif)
 

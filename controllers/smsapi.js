@@ -11,7 +11,8 @@ const patient = require('../models/patient');
 
 
 router.get('/smssend/:lang/:phone/:message', passport.authenticate('bearer', { session: false }), async (req, res) => {
-    console.log(req);
+
+    console.log(req.params);
     await request(`https://api.1s2u.io/bulksms?username=smsnidhal15020&password=web55023&mt=0&fl=${req.params.lang}&sid=CliniqueOkba&mno=${req.params.phone}&msg=${req.params.message}`, function (error, response, body) {
         console.error('error:', error); // Print the error if one occurred
         console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
@@ -85,9 +86,6 @@ router.get('/getAllsmss', passport.authenticate('bearer', { session: false }), a
 
 
 cron.schedule('*/5 * * * *', function (res) {
-
-
-
     console.log('---------------------');
     console.log('Running Cron Job');
     Patient.count(function (err, count) {
