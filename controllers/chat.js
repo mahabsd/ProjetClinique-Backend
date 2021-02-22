@@ -3,8 +3,8 @@ const router = express.Router();
 const Chat = require('../models/chat');
 const passport = require('passport');
 const multer = require('multer');
-
 const path = require('path');
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './uploads')
@@ -14,7 +14,6 @@ const storage = multer.diskStorage({
         const chat = await Chat.findById(req.params.idChat);
         const io = req.app.get('io');
         const filePath = "http://localhost:3000/uploads/" + fileName;
-        console.log(req.body.logo);
         const message = {
             logo: req.body.logo,
             candidat: req.body.candidat,
@@ -28,8 +27,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post('/sendMessage/:idChat', [upload.array('myFiles', 12), passport.authenticate('bearer', { session: false })], async (req, res) => {
-    console.log(req.body.logo);
-    if ((req.body.content !== null && req.body.content !== undefined)||(req.file != 0)) {
+    if ((req.body.content !== null && req.body.content !== undefined)||(req.file != null)) {
         const chat = await Chat.findById(req.params.idChat);
         const io = req.app.get('io');
         const message = {

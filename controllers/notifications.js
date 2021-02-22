@@ -5,6 +5,34 @@ const Conge = require("../models/conge");
 const Sms = require("../models/sms")
 const Chat = require("../models/chat")
 
+
+
+// Send Notification API
+router.post('/send-notification', (req, res) => {
+    const notify = {data: req.body};
+    const io = req.router.get('io');
+    io.emit('notification', notify); // Updates Live Notification
+    res.send(notify);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var notifs = {
     maint: '',
     conge: '',

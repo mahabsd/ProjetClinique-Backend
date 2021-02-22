@@ -84,9 +84,7 @@ router.delete('/user/delete/:id', passport.authenticate('bearer', { session: fal
     models.push(conge);
     models.push(maintenance);
     models.map(model => {
-        model.deleteOne({ userOwner: req.params.id }, function (err) {
-            if (err) return handleError(err);
-        })
+        model.deleteOne({ userOwner: req.params.id })
     });
 })
 //update by Id
@@ -133,16 +131,6 @@ router.get('/getAllusers', passport.authenticate('bearer', { session: false }), 
     User.find().populate('work.roles').exec().then(function (users) {
         res.status(200).json(users);
     }).catch(err => res.status(400).json('Error: ' + err));
-});
-
-//Upload single image and add it to a user
-router.post('/upload/', upload.single('image'), (req, res, next) => {
-    console.log(req.file.path);
-    res.status(200).json({ message: "uploaded successfully" });
-    // User.findByIdAndUpdate(req.params.idUser, {profile: {image : req.file.path} } ).then(data => {
-    //     res.send({success : true, status : 'uploaded successfully'});
-    // })
-
 });
 
 //get All users
