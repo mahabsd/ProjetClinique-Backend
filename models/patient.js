@@ -3,6 +3,7 @@ var Schema = mongoose.Schema
 
 var patientSchema = new Schema(
     {
+        
         cin: { type: String },
         dateDentre: { type: String },
         service: { type: String },
@@ -11,7 +12,8 @@ var patientSchema = new Schema(
             name: { type: String },
             surname: { type: String },
             birthday: { type: String },
-            image: { type: String },
+            image: { type: String,
+                default:"assets/img/users/default-user.jpg" },
         },
         work: {
             position: { type: String },
@@ -25,7 +27,7 @@ var patientSchema = new Schema(
             isDeleted: { type: Boolean },
             bgColor: { type: String }
         },
-       
+        
 
     },
     { timestamps: true }

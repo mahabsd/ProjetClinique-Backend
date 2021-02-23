@@ -12,7 +12,7 @@ var userSchema = new Schema(
             birthday: { type: String },
             gender: { type: String },
             image: { type: String },
-            cin: { type: String },
+            
         },
         work: {
             company: { type: String },
@@ -24,11 +24,11 @@ var userSchema = new Schema(
             phone: { type: String },
             address: { type: String },
         },
-        social: {
-            facebook: { type: String },
-            twitter: { type: String },
-            google: { type: String },
-        },
+        // social: {
+        //     facebook: { type: String },
+        //     twitter: { type: String },
+        //     google: { type: String },
+        // },
         settings: {
             status: { type: String },
             // isActive: { type: Boolean },

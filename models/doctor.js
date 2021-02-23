@@ -8,7 +8,8 @@ var doctorSchema = new Schema(
             name: { type: String },
             surname: { type: String },
             birthday: { type: String },
-            image: { type: String },
+            image: { type: String,
+                default:"assets/img/users/default-user.jpg" },
         },
         work: {
             position: { type: String },
@@ -23,7 +24,7 @@ var doctorSchema = new Schema(
             bgColor: { type: String }
         },
         userDoctor: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-
+        
     },
     { timestamps: true })
 module.exports = mongoose.model('Doctor', doctorSchema);

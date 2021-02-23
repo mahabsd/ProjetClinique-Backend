@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const User = require("../models/user");
+const conge = require("../models/conge");
+const rendezVous = require("../models/RendezVous");
+const sms = require("../models/sms");
+const maintenance = require("../models/maitenance");
 const Role = require("../models/role");
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
@@ -41,7 +45,7 @@ router.post('/user/add/', [upload.single('image'), passport.authenticate('bearer
         profile: JSON.parse(formData.profile),
         work: JSON.parse(formData.work),
         contacts: JSON.parse(formData.contacts),
-        social: JSON.parse(formData.social),
+    //    social: JSON.parse(formData.social),
         settings: JSON.parse(formData.settings),
     })
     if (req.file) {
@@ -61,47 +65,53 @@ router.post('/user/add/', [upload.single('image'), passport.authenticate('bearer
 //get by Id
 router.get('/user/:id', passport.authenticate('bearer', { session: false }), (req, res) => {
 
-            User.findById(req.params.id).populate('work.roles').exec().then(data => {
-                res.status(200).json(data);
-            }).catch(err => res.status(400).json('Error: ' + err));
+    User.findById(req.params.id).populate('work.roles').exec().then(data => {
+        res.status(200).json(data);
+    }).catch(err => res.status(400).json('Error: ' + err));
 });
 
 //delete by Id
 router.delete('/user/delete/:id', passport.authenticate('bearer', { session: false }), (req, res) => {
 
-            User.findByIdAndDelete(
-                req.params.id, req.body).then(function () {
-                    res.status(200).json("user deleted successfully");
+    User.findByIdAndDelete(
+        req.params.id, req.body).then(function () {
+            res.status(200).json("user deleted successfully");
 
-                }).catch(err => res.status(400).json('Error: ' + err));
-
-});
-
+        }).catch(err => res.status(400).json('Error: ' + err));
+    let models = [];
+    models.push(sms);
+    models.push(rendezVous);
+    models.push(conge);
+    models.push(maintenance);
+    models.map(model => {
+        model.deleteOne({ userOwner: req.params.id })
+    });
+})
 //update by Id
 router.put('/user/update/:id', [upload.single('image'), passport.authenticate('bearer', { session: false })], (req, res) => {
 
-            var formData = JSON.parse(JSON.stringify((req.body)));
-            user = {
-                username: JSON.parse(formData.username),
-                password: JSON.parse(formData.password),
-                profile: JSON.parse(formData.profile),
-                work: JSON.parse(formData.work),
-                contacts: JSON.parse(formData.contacts),
-                social: JSON.parse(formData.social),
-                settings: JSON.parse(formData.settings),
-            }
-            console.log(user);
-            bcrypt.hash(user.password, 10, function (err, hash) {
-                user.password = hash;
-                if (req.file) {
-                    user.profile.image = req.file.path
-                }
-                User.findByIdAndUpdate(req.params.id, user).then(function (user) {
-                    res.status(200).json(
-                        { message: "updated successfully" }
-                    );
-                }).catch(err => res.status(400).json('Error: ' + err));
-            })
+    var formData = JSON.parse(JSON.stringify((req.body)));
+    user = {
+        username: JSON.parse(formData.username),
+        password: JSON.parse(formData.password),
+        profile: JSON.parse(formData.profile),
+        work: JSON.parse(formData.work),
+        contacts: JSON.parse(formData.contacts),
+        social: JSON.parse(formData.social),
+        settings: JSON.parse(formData.settings),
+    }
+    console.log(user);
+    bcrypt.hash(user.password, 10, function (err, hash) {
+        user.password = hash;
+        if (req.file) {
+            user.profile.image = req.file.path
+        }
+        User.findByIdAndUpdate(req.params.id, user).then(function (user) {
+            res.status(200).json(
+                { message: "updated successfully" }
+            );
+        }).catch(err => res.status(400).json('Error: ' + err));
+    })
 });
 
 //update by Id without JSON parser
@@ -121,16 +131,6 @@ router.get('/getAllusers', passport.authenticate('bearer', { session: false }), 
     User.find().populate('work.roles').exec().then(function (users) {
         res.status(200).json(users);
     }).catch(err => res.status(400).json('Error: ' + err));
-});
-
-//Upload single image and add it to a user
-router.post('/upload/', upload.single('image'), (req, res, next) => {
-    console.log(req.file.path);
-    res.status(200).json({ message: "uploaded successfully" });
-    // User.findByIdAndUpdate(req.params.idUser, {profile: {image : req.file.path} } ).then(data => {
-    //     res.send({success : true, status : 'uploaded successfully'});
-    // })
-
 });
 
 //get All users
