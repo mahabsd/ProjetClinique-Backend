@@ -46,7 +46,7 @@ var services = [
 const salt = bcrypt.genSaltSync(10);
 var users = [
     // { username: "nidhal", lastName: "nidhal", profile: {name:"nidhal",surname: "nidhal"},contacts:{email: "nidhal@gmail.com"}, password: bcrypt.hashSync("admin", salt), roles: [] },
-    // { username: "admin", lastName: "admin", profile: {name:"nidhal",surname: "nidhal"}, contacts:{email: "admin@gmail.com"}, password: bcrypt.hashSync("admin", salt), roles: [] },
+    // { username: "admin", lastName: "admin", profile: {name:"nidhal",surname: "nidhal"}, contacts:{email: "admin@gmail.com"}, password: bcrypt.hashSync("admin", salt), roles: [] },  
     {
         username: "pretty",
         password:  bcrypt.hashSync("123"),
