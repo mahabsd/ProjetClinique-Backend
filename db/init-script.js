@@ -67,11 +67,6 @@ var users = [
             phone: "(202) 756-9756",
             address: "Washington"
         },
-        social: {
-            facebook: "ashley_ahlberg",
-            twitter: "ashley_ahlberg",
-            google: "ashley_ahlberg"
-        },
         settings: {
             // isActive: true,
             isDeleted: false,
