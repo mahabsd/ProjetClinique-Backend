@@ -19,7 +19,7 @@ router.post('/send-notification', passport.authenticate('bearer', { session: fal
 
 //get all notif
 router.get('/get-notification/',passport.authenticate('bearer', { session: false }), (req, res) =>{
-    Notif.find().then(data => {
+    Notif.find().populate("userOwner").populate("reciever").then(data => {
         res.status(200).json(data);
     }).catch(err => res.status(400).json('Error: ' + err));
 })
