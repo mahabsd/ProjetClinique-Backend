@@ -6,6 +6,7 @@ var notification = new Schema({
     text: { type: String },
     userOwner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     createdDate: { type: Date, default: Date.now() },
+    messages:  { type: String }
 });
 
 module.exports = mongoose.model('notification', notification);

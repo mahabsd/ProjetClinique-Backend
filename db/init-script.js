@@ -55,7 +55,7 @@ var users = [
             surname: "Ahlberg",
             birthday: new Date(1981, 2, 29),
             gender: "female",
-            image: "assets/img/profile/ashley.jpg"
+            image: "http://localhost:3000/api/img/ashley.jpg"
         },
         work: {
             company: "Google",
