@@ -73,7 +73,7 @@ router.put('/sms/update/:id', passport.authenticate('bearer', { session: false }
 router.get('/getAllsmss', passport.authenticate('bearer', { session: false }), async (req, res) => {
 
 
-    await Sms.find({}).populate('smsOwner').then(function (smss) {
+    await Sms.find({}).then(function (smss) {
 
 
         res.status(200).json(smss);
@@ -128,7 +128,7 @@ cron.schedule('*/5 * * * *', function (res) {
             Patient.find().then((patient) => {
                 patient.forEach(element => {
                     let date = new Date(Date.now());
-                    date1 = new Date(Date.parse(element.profile.birthday));
+                    date1 = new Date(Date.parse(element.dateDentre));
                     if ((parseInt(date1.getDate(), 10) - parseInt(date.getDate(), 10) === 3 &&
                         element.service === "Maternité" && element.service === "Accouchement" &&
                         (parseInt(date1.getMonth(), 10) - parseInt(date.getMonth(), 10) === 2
@@ -157,7 +157,7 @@ cron.schedule('*/5 * * * *', function (res) {
             Patient.find().then((patient) => {
                 patient.forEach(element => {
                     let date = new Date(Date.now());
-                    date1 = new Date(Date.parse(element.profile.birthday));
+                    date1 = new Date(Date.parse(element.dateDentre));
                     if ((parseInt(date1.getDate(), 10) - parseInt(date.getDate(), 10) === 3 &&
                         element.service === "Maternité" && element.service === "Accouchement" &&
                         (parseInt(date1.getMonth(), 10) - parseInt(date.getMonth(), 10) === 10
@@ -192,7 +192,7 @@ cron.schedule('*/5 * * * *', function (res) {
                             contacts: {
                                 phone: element.contacts.phone,
                                 type: "0",
-                                message: "Bonne Anniversaire",
+                                message: "Clinique Okba Vous souhaite un joyeuse Anniversaire",
                             },
                             smsOwner: element._id,
                         }
