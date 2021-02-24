@@ -49,7 +49,7 @@ router.post('/user/add/', [upload.single('image'), passport.authenticate('bearer
         settings: JSON.parse(formData.settings),
     })
     if (req.file) {
-        user.profile.image = req.file.path
+        user.profile.image = "http://localhost:3000/api/"+ req.file.path
     }
     bcrypt.hash(user.password, 10, function (err, hash) {
         user.password = hash;
@@ -97,14 +97,14 @@ router.put('/user/update/:id', [upload.single('image'), passport.authenticate('b
         profile: JSON.parse(formData.profile),
         work: JSON.parse(formData.work),
         contacts: JSON.parse(formData.contacts),
-        social: JSON.parse(formData.social),
+      //  social: JSON.parse(formData.social),
         settings: JSON.parse(formData.settings),
     }
     console.log(user);
     bcrypt.hash(user.password, 10, function (err, hash) {
         user.password = hash;
         if (req.file) {
-            user.profile.image = req.file.path
+            user.profile.image = "http://localhost:3000/api/"+req.file.path
         }
         User.findByIdAndUpdate(req.params.id, user).then(function (user) {
             res.status(200).json(

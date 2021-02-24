@@ -7,7 +7,6 @@ router.post('/todo/add', passport.authenticate('bearer', { session: false }), (r
 
     var todo = new Todo(req.body);
     todo.save().then(function () {
-        console.log(todo);
         res.json(todo);
     }).catch(err => res.status(400).json('Error: ' + err));
 
@@ -16,8 +15,7 @@ router.post('/todo/add', passport.authenticate('bearer', { session: false }), (r
 //get todo by ID
 router.get('/todo/:id', passport.authenticate('bearer', { session: false }), (req, res) => {
     Todo.findById(req.params.id).then(data => {
-        res.send(data);
-        res.status(200).json();
+        res.status(200).json(data);
     }).catch(err => res.status(400).json('Error: ' + err));
 
 });
@@ -25,8 +23,7 @@ router.get('/todo/:id', passport.authenticate('bearer', { session: false }), (re
 //update todo by ID
 router.put('/todo/update/:id', passport.authenticate('bearer', { session: false }), (req, res) => {
     Todo.findByIdAndUpdate(req.params.id, req.body).then(function () {
-        res.send(req.body);
-        res.status(200).json();
+        res.status(200).json(req.body);
     }).catch(err => res.status(400).json('Error: ' + err));
 
 })
@@ -34,16 +31,14 @@ router.put('/todo/update/:id', passport.authenticate('bearer', { session: false 
 //delete todo by ID
 router.delete('/todo/delete/:id', passport.authenticate('bearer', { session: false }), (req, res) => {
     Todo.findByIdAndDelete(req.params.id, req.body).then(() => {
-        res.send("user deleted successfully");
-        res.status(200).json();
+        res.status(200).json("user deleted successfully");
     }).catch(err => res.status(400).json('Error: ' + err));
 
 })
 //get All todo by ID
 router.get('/getAllTodos', passport.authenticate('bearer', { session: false }), (req, res) => {
     Todo.find().then(function (todo) {
-        res.send(todo)
-        res.status(200).json();
+        res.status(200).json(todo);
     }).catch(err => res.status(400).json('Error: ' + err));
 
 })
