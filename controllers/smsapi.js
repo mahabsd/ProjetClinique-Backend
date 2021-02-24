@@ -73,7 +73,7 @@ router.put('/sms/update/:id', passport.authenticate('bearer', { session: false }
 router.get('/getAllsmss', passport.authenticate('bearer', { session: false }), async (req, res) => {
 
 
-    await Sms.find({}).then(function (smss) {
+    await Sms.find({}).populate(smsOwner).populate(acts).populate(docs).then(function (smss) {
 
 
         res.status(200).json(smss);
