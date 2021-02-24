@@ -16,12 +16,8 @@ var smsSchema = new Schema(
         type: { type: Number },
         message: { type: String },
         },
-        smsOwner:{ type: mongoose.Schema.Types.ObjectId,refPath: 'onModel'},
-        onModel: {
-            type: String,
-           
-            enum: ['Patient', 'Actionnaire','Doctor']
-          },
+        smsOwner:{ type: mongoose.Schema.Types.ObjectId,ref: 'patient'},
+        
         userOwner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }},
         {timestamps: { currentTime: () => Date.now()  }}
     );
