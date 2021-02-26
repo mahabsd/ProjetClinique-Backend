@@ -65,7 +65,7 @@ router.post('/user/add/', [upload.single('image'), passport.authenticate('bearer
 //get by Id
 router.get('/user/:id', passport.authenticate('bearer', { session: false }), (req, res) => {
 
-    User.findById(req.params.id).populate('work.roles').exec().then(data => {
+    User.findById(req.params.id).populate('work.roles').then(data => {
         res.status(200).json(data);
     }).catch(err => res.status(400).json('Error: ' + err));
 });
