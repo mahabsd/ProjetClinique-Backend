@@ -2,12 +2,10 @@ const express = require('express')
 const router = express.Router();
 const request = require('request');
 const Sms = require("../models/sms")
-const jwt = require("jsonwebtoken");
 const cron = require('node-cron');
 const passport = require('passport');
 const Patient = require("../models/patient");
 const Doctor = require("../models/doctor");
-const patient = require('../models/patient');
 
 
 router.get('/smssend/:lang/:phone/:message', passport.authenticate('bearer', { session: false }), async (req, res) => {
@@ -72,7 +70,7 @@ router.put('/sms/update/:id', passport.authenticate('bearer', { session: false }
 
 router.get('/getAllsmss', passport.authenticate('bearer', { session: false }), async (req, res) => {
 
-    await Sms.find({}).then(function (smss) {
+    await Sms.find({}).populate('smsOwner').then(function (smss) {
         res.status(200).json(smss);
     }).catch(err => res.status(400).json('Error: ' + err));
 
