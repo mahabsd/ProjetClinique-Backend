@@ -14,10 +14,11 @@ var smsSchema = new Schema(
         type: { type: Number },
         message: { type: String },
         },
-        smsPatient:{ type: mongoose.Schema.Types.ObjectId,refPath: 'Patient'},
-        smsActionnaire:{ type: mongoose.Schema.Types.ObjectId,refPath: 'Actionnaire'},
-        smsDoctor:{ type: mongoose.Schema.Types.ObjectId,refPath: 'Doctor'},
+        pats:{ type: mongoose.Schema.Types.ObjectId,ref: 'Patient'},
+        acts:{ type: mongoose.Schema.Types.ObjectId,ref: 'Actionnaire'},
+        docs:{ type: mongoose.Schema.Types.ObjectId,ref: 'Doctor'},
+        
         userOwner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }},
-        {timestamps: { currentTime: () => Date.now()  }}
+        {timestamps: true}
     );
 module.exports = mongoose.model('Sms', smsSchema);
