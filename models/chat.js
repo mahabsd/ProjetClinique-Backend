@@ -8,7 +8,7 @@ var privateChat = new  Schema(
         content: {type: String},
         logo : {type: String},
         candidat: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-        createdDate: {type: Date, default: Date.now()},
+        createdDate:  { type: Date, default: new Date()},
         files:[],
         notifications : {type :Boolean, default : false},
     }]
