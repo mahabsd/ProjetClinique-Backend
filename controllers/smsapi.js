@@ -70,10 +70,10 @@ router.put('/sms/update/:id', passport.authenticate('bearer', { session: false }
 });
 
 
-router.get('/getAllsmss', passport.authenticate('bearer', { session: false }), async (req, res) => {
+router.get('/getAllsmssPatient', passport.authenticate('bearer', { session: false }), async (req, res) => {
 
 
-    await Sms.find({}).then(function (smss) {
+    await Sms.find({smsOwner:{$exists:true,$ne:null}}).populate('smsOwner').then(function (smss) {
 
 
         res.status(200).json(smss);
@@ -82,6 +82,44 @@ router.get('/getAllsmss', passport.authenticate('bearer', { session: false }), a
 
 
 });
+router.get('/getAllsmssacts', passport.authenticate('bearer', { session: false }), async (req, res) => {
+
+
+    await Sms.find({acts:{$exists:true,$ne:null}}).populate('acts').exec().then(function (smss) {
+
+
+        res.status(200).json(smss);
+    }).catch(err => res.status(400).json('Error: ' + err));
+
+
+
+});
+router.get('/getAllsmssdocs', passport.authenticate('bearer', { session: false }), async (req, res) => {
+
+
+    await Sms.find({docs:{$exists:true,$ne:null}}).populate('docs').exec().then(function (smss) {
+
+
+        res.status(200).json(smss);
+    }).catch(err => res.status(400).json('Error: ' + err));
+
+
+
+});
+router.get('/getAllsmssauto', passport.authenticate('bearer', { session: false }), async (req, res) => {
+
+
+    await Sms.find({user:{$exists:true,$ne:null}}).populate('userOwner').exec().then(function (smss) {
+
+
+        res.status(200).json(smss);
+    }).catch(err => res.status(400).json('Error: ' + err));
+
+
+
+});
+
+
 
 
 
@@ -109,6 +147,7 @@ cron.schedule('*/5 * * * *', function (res) {
                         var message = {
                             status: "en cours",
                             userOwner: element._id,
+                            smsOwner: element._id,
 
                             contacts: {
                                 phone: element.contacts.phone,
@@ -194,7 +233,7 @@ cron.schedule('*/5 * * * *', function (res) {
                                 type: "0",
                                 message: "Clinique Okba Vous souhaite un joyeuse Anniversaire",
                             },
-                            smsOwner: element._id,
+                            docs: element._id,
                         }
 
                         Sms.create(message).then(function (sms) {

@@ -16,8 +16,13 @@ var smsSchema = new Schema(
         type: { type: Number },
         message: { type: String },
         },
-        smsOwner:{ type: mongoose.Schema.Types.ObjectId,ref: 'patient'},
-        
+        smsOwner:{ type: mongoose.Schema.Types.ObjectId,ref: 'Patient'},
+        acts:{ type: mongoose.Schema.Types.ObjectId,ref: 'Actionnaire'},
+        docs:{ type: mongoose.Schema.Types.ObjectId,ref: 'Doctor'},
+        user:{ type: mongoose.Schema.Types.ObjectId,ref: 'User'},
+
+
+
         userOwner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }},
         {timestamps: true}
     );

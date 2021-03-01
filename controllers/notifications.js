@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Notif = require("../models/notification");
 const passport = require('passport');
+const cron = require('node-cron');
 
 
 // Send Notification API
@@ -18,9 +19,19 @@ router.post('/send-notification', passport.authenticate('bearer', { session: fal
 });
 
 //get all notif
-router.get('/get-notification/',passport.authenticate('bearer', { session: false }), (req, res) =>{
-    Notif.find().then(data => {
+router.get('/get-notification/', passport.authenticate('bearer', { session: false }), (req, res) => {
+    Notif.find().populate("userOwner").populate("reciever").then(data => {
         res.status(200).json(data);
     }).catch(err => res.status(400).json('Error: ' + err));
 })
+
+//delete notification
+router.delete('/delete/:id', passport.authenticate('bearer', { session: false }), (req, res) => {
+     let start =  cron.schedule('*/30 * * * *', () => {
+        Notif.findByIdAndDelete(req.params.id).then(data => {
+            res.status(200).json({ message: 'deleted successfully' });
+        }).catch(err => res.status(400).json('Error: ' + err));});
+//start.stop();
+})
+
 module.exports = router;
