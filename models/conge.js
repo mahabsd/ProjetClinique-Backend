@@ -10,7 +10,7 @@ var congeSchema = new Schema(
         status: { type: String },
         notifications : {type :Boolean, default : false},
         userOwner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }},
-        {timestamps: { currentTime: () => Date.now()  }}
+        {timestamps: true}
     );
 
 module.exports = mongoose.model('Conge', congeSchema);
