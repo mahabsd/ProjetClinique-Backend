@@ -11,7 +11,7 @@ var maintenanceSchema = new Schema(
         },
         notifications : {type :Boolean, default : false},
         userOwner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }} ,
-        {timestamps: { currentTime: () => Date.now() }}
+        {timestamps: true}
         
     );
 

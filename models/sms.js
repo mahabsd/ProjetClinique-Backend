@@ -19,7 +19,7 @@ var smsSchema = new Schema(
         smsOwner:{ type: mongoose.Schema.Types.ObjectId,ref: 'patient'},
         
         userOwner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }},
-        {timestamps: { currentTime: () => Date.now()  }}
+        {timestamps: true}
     );
   
 module.exports = mongoose.model('Sms', smsSchema);
