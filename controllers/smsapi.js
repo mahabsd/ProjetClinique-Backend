@@ -2,16 +2,21 @@ const express = require('express')
 const router = express.Router();
 const request = require('request');
 const Sms = require("../models/sms")
+const jwt = require("jsonwebtoken");
 const cron = require('node-cron');
 const passport = require('passport');
 const Patient = require("../models/patient");
 const Doctor = require("../models/doctor");
+const patient = require('../models/patient');
 
 
 router.get('/smssend/:lang/:phone/:message', passport.authenticate('bearer', { session: false }), async (req, res) => {
 
+    console.log(req.params);
     await request(`https://api.1s2u.io/bulksms?username=smsnidhal15020&password=web55023&mt=0&fl=${req.params.lang}&sid=CliniqueOkba&mno=${req.params.phone}&msg=${req.params.message}`, function (error, response, body) {
         console.error('error:', error); // Print the error if one occurred
+        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        console.log('body:', body); // Print the HTML for the Google homepage.
         res.send(body)
     });
 });
@@ -65,18 +70,62 @@ router.put('/sms/update/:id', passport.authenticate('bearer', { session: false }
 });
 
 
-router.get('/getAllsmss', passport.authenticate('bearer', { session: false }), async (req, res) => {
+router.get('/getAllsmssPatient', passport.authenticate('bearer', { session: false }), async (req, res) => {
 
-    await Sms.find({}).populate('smsOwner').then(function (smss) {
+
+    await Sms.find({smsOwner:{$exists:true,$ne:null}}).populate('smsOwner').then(function (smss) {
+
+
         res.status(200).json(smss);
     }).catch(err => res.status(400).json('Error: ' + err));
+
+
+
+});
+router.get('/getAllsmssacts', passport.authenticate('bearer', { session: false }), async (req, res) => {
+
+
+    await Sms.find({acts:{$exists:true,$ne:null}}).populate('acts').exec().then(function (smss) {
+
+
+        res.status(200).json(smss);
+    }).catch(err => res.status(400).json('Error: ' + err));
+
+
+
+});
+router.get('/getAllsmssdocs', passport.authenticate('bearer', { session: false }), async (req, res) => {
+
+
+    await Sms.find({docs:{$exists:true,$ne:null}}).populate('docs').exec().then(function (smss) {
+
+
+        res.status(200).json(smss);
+    }).catch(err => res.status(400).json('Error: ' + err));
+
+
+
+});
+router.get('/getAllsmssauto', passport.authenticate('bearer', { session: false }), async (req, res) => {
+
+
+    await Sms.find({user:{$exists:true,$ne:null}}).populate('userOwner').exec().then(function (smss) {
+
+
+        res.status(200).json(smss);
+    }).catch(err => res.status(400).json('Error: ' + err));
+
+
 
 });
 
 
 
-cron.schedule('*/5 * * * *', function (res) {
 
+
+cron.schedule('*/5 * * * *', function (res) {
+    console.log('---------------------');
+    console.log('Running Cron Job');
     Patient.count(function (err, count) {
         console.dir(err);
         console.dir(count);
@@ -90,11 +139,15 @@ cron.schedule('*/5 * * * *', function (res) {
 
 
                     date1 = new Date(Date.parse(element.profile.birthday));
+                    console.log(parseInt(date.getDate(), 10));
+                    console.log(parseInt(date.getMonth(), 10));
+                    console.log(parseInt(date.getDate(), 10) - parseInt(date.getMonth(), 10));
 
                     if (date1.getDate() === date.getDate() && date1.getMonth() === date.getMonth()) {
                         var message = {
                             status: "en cours",
                             userOwner: element._id,
+                            smsOwner: element._id,
 
                             contacts: {
                                 phone: element.contacts.phone,
@@ -180,7 +233,7 @@ cron.schedule('*/5 * * * *', function (res) {
                                 type: "0",
                                 message: "Clinique Okba Vous souhaite un joyeuse Anniversaire",
                             },
-                            smsOwner: element._id,
+                            docs: element._id,
                         }
 
                         Sms.create(message).then(function (sms) {
