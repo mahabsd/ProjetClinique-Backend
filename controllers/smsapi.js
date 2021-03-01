@@ -10,11 +10,8 @@ const Doctor = require("../models/doctor");
 
 router.get('/smssend/:lang/:phone/:message', passport.authenticate('bearer', { session: false }), async (req, res) => {
 
-    console.log(req.params);
     await request(`https://api.1s2u.io/bulksms?username=smsnidhal15020&password=web55023&mt=0&fl=${req.params.lang}&sid=CliniqueOkba&mno=${req.params.phone}&msg=${req.params.message}`, function (error, response, body) {
         console.error('error:', error); // Print the error if one occurred
-        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-        console.log('body:', body); // Print the HTML for the Google homepage.
         res.send(body)
     });
 });
@@ -79,8 +76,7 @@ router.get('/getAllsmss', passport.authenticate('bearer', { session: false }), a
 
 
 cron.schedule('*/5 * * * *', function (res) {
-    console.log('---------------------');
-    console.log('Running Cron Job');
+
     Patient.count(function (err, count) {
         console.dir(err);
         console.dir(count);
@@ -94,9 +90,6 @@ cron.schedule('*/5 * * * *', function (res) {
 
 
                     date1 = new Date(Date.parse(element.profile.birthday));
-                    console.log(parseInt(date.getDate(), 10));
-                    console.log(parseInt(date.getMonth(), 10));
-                    console.log(parseInt(date.getDate(), 10) - parseInt(date.getMonth(), 10));
 
                     if (date1.getDate() === date.getDate() && date1.getMonth() === date.getMonth()) {
                         var message = {

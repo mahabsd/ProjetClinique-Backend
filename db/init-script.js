@@ -1,6 +1,5 @@
 const User = require("../models/user");
 const Role = require("../models/role");
-const Service = require("../models/service");
 const bcrypt = require('bcryptjs');
 
 
@@ -92,9 +91,8 @@ Role.count(function (err, count) {
                 console.dir(count);
                 if (count == 0) {
                     // replaces roles by ids
-                    console.log(rolesDB);
+
                     Role.findOne({ name: "admin" }, function (error, roleDB) {
-                        console.log("helo roleee " + roleDB._id);
                         users.map(user => user.work.roles = roleDB._id)
                         User.insertMany(users).then((users) => {
                         }).catch(err => console.log(err))
@@ -113,12 +111,3 @@ Role.count(function (err, count) {
 
 
 });
-
-// Service.count(function (err, count) {
-//     if (count == 0) {
-//         Service.insertMany(services).then((servicesDB) => {
-//             console.log("service added successfully");
-//             console.log(servicesDB);
-//         }
-//     }
-// });

@@ -27,10 +27,11 @@ router.get('/get-notification/', passport.authenticate('bearer', { session: fals
 
 //delete notification
 router.delete('/delete/:id', passport.authenticate('bearer', { session: false }), (req, res) => {
-        cron.schedule('10 * * * *', () => {
+     let start =  cron.schedule('*/30 * * * *', () => {
         Notif.findByIdAndDelete(req.params.id).then(data => {
             res.status(200).json({ message: 'deleted successfully' });
         }).catch(err => res.status(400).json('Error: ' + err));});
+//start.stop();
 })
 
 module.exports = router;
