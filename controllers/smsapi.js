@@ -121,11 +121,7 @@ router.get('/getAllsmssauto', passport.authenticate('bearer', { session: false }
 
 
 
-
-
 cron.schedule('*/5 * * * *', function (res) {
-    console.log('---------------------');
-    console.log('Running Cron Job');
     Patient.count(function (err, count) {
         console.dir(err);
         console.dir(count);

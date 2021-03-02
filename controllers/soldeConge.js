@@ -4,8 +4,7 @@ const User = require("../models/user");
 
 // Sending emails every Wednesday.
 cron.schedule(' 0 0 1 * *', function () {
-    console.log('---------------------');
-    console.log('Running Cron Job');
+
     User.count(function (err, count) {
         console.dir(err);
         console.dir(count);
