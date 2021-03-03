@@ -48,6 +48,7 @@ router.get('/getAllRendezVous', passport.authenticate('bearer', { session: false
         //  res.send()
         rendezVous.forEach(element => {
           var schedule ={
+              _id:element._id,
               start: element.start,
               description: element.descrip,
               title:element.title ,
