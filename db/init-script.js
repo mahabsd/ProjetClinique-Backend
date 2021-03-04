@@ -3,7 +3,7 @@ const Role = require("../models/role");
 const bcrypt = require('bcryptjs');
 
 
-var roles = [
+const roles = [
     { name: "admin" },
     { name: "pdg" },
     { name: "Responsable-info" },
@@ -35,15 +35,7 @@ var roles = [
     { name: "Services" },
     { name: "pharmaciens" },
 ]
-var services = [
-    { name: "Bloc" },
-    { name: "Covid" },
-    { name: "Chirurgie" },
-    { name: "Maternité" },
-]
-
-const salt = bcrypt.genSaltSync(10);
-var users = [
+const users = [
     // { username: "nidhal", lastName: "nidhal", profile: {name:"nidhal",surname: "nidhal"},contacts:{email: "nidhal@gmail.com"}, password: bcrypt.hashSync("admin", salt), roles: [] },
     // { username: "admin", lastName: "admin", profile: {name:"nidhal",surname: "nidhal"}, contacts:{email: "admin@gmail.com"}, password: bcrypt.hashSync("admin", salt), roles: [] },  
     {
@@ -76,14 +68,10 @@ var users = [
         roles: []
     }
 ];
-var Users;
 // To Count Documents of a particular collection
 
 Role.count(function (err, count) {
-    console.dir(err);
-    console.dir(count);
     if (count == 0) {
-
         Role.insertMany(roles).then((rolesDB) => {
             // ajouter les users with roles
             User.count(function (err, count) {
@@ -98,16 +86,8 @@ Role.count(function (err, count) {
                         }).catch(err => console.log(err))
                     });
                 }
-                else {
-                    console.log("Found Records : " + count);
-                }
             });
         }).catch(err => console.log(err))
     }
-    else {
-        console.log("Found Records : " + count);
-    }
-
-
 
 });

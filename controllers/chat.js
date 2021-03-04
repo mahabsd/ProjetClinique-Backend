@@ -27,6 +27,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post('/sendMessage/:idChat', [upload.array('myFiles', 12), passport.authenticate('bearer', { session: false })], async (req, res) => {
+    console.log(req.body);
+
     if ((req.body.content !== null && req.body.content !== undefined)||(req.file != null)) {
         const chat = await Chat.findById(req.params.idChat);
         const io = req.app.get('io');
@@ -53,7 +55,7 @@ router.get('/getPrivateMessage/:idCandidat1/:idCandidat2', passport.authenticate
                     res.send(err2);
                 }
                 if (!chat2) {
-                    var chat = new Chat({ candidat1: req.params.idCandidat1, candidat2: req.params.idCandidat2, messages: [] });
+                    let chat = new Chat({ candidat1: req.params.idCandidat1, candidat2: req.params.idCandidat2, messages: [] });
                     chat.save(function (err3, chat) {
                         if (err3) {
                             res.send(err3)

@@ -18,7 +18,6 @@ const storage = multer.diskStorage({
         cb(null, './img/');
     },
     filename: (req, file, cb) => {
-        console.log(file);
         cb(null, Date.now() + path.extname(file.originalname));
     }
 });
@@ -35,10 +34,7 @@ const upload = multer({ storage: storage, fileFilter: fileFilter });
 //add new user
 router.post('/user/add/', [upload.single('image'), passport.authenticate('bearer', { session: false })], (req, res) => {
 
-    console.log(JSON.parse(JSON.stringify((req.body))));
-
-    var formData = JSON.parse(JSON.stringify((req.body)));
-    console.log(JSON.parse(formData.profile));
+    let formData = JSON.parse(JSON.stringify((req.body)));
     user = new User({
         username: JSON.parse(formData.username),
         password: JSON.parse(formData.password),
@@ -90,7 +86,7 @@ router.delete('/user/delete/:id', passport.authenticate('bearer', { session: fal
 //update by Id
 router.put('/user/update/:id', [upload.single('image'), passport.authenticate('bearer', { session: false })], (req, res) => {
 
-    var formData = JSON.parse(JSON.stringify((req.body)));
+    let formData = JSON.parse(JSON.stringify((req.body)));
     user = {
         username: JSON.parse(formData.username),
         password: JSON.parse(formData.password),
@@ -100,7 +96,6 @@ router.put('/user/update/:id', [upload.single('image'), passport.authenticate('b
       //  social: JSON.parse(formData.social),
         settings: JSON.parse(formData.settings),
     }
-    console.log(user);
     bcrypt.hash(user.password, 10, function (err, hash) {
         user.password = hash;
         if (req.file) {
@@ -141,45 +136,7 @@ router.get('/getAllRoles', passport.authenticate('bearer', { session: false }), 
     }).catch(err => res.status(400).json('Error: ' + err));
 
 });
-
-//login
-router.post('/user/login/', (req, res) => {
-
-    User.findOne(
-        { "contacts.email": req.body.email }, function (err, obj) { console.log(obj); }
-    ).populate('work.roles').then(user => {
-        //if user not exist then return status 400
-        if (!user) return res.status(400).json({
-            message: "Please verify your e-mail or password."
-        })
-        bcrypt.compare(req.body.password, user.password, (err, data) => {
-            //if error than throw error
-            if (err) throw err
-            //if both match then you can do anything
-            if (data) {
-                const data1 = {
-                    _id: user._id,
-                    email: user.email,
-                    roles: user.work.roles,
-                    soldeConge: user.work.soldeConge
-                }
-                var token = jwt.sign(data1, 'secret');
-                return res.status(200).json({
-                    token: token,
-                    user,
-                    message: "Welcome back, to okba"
-                })
-            } else {
-                return res.status(401).json({
-                    message: "Please verify your e-mail or password."
-                })
-            }
-
-        })
-
-    })
-
-});
+    
 
 // sign in with passport
 router.post('/login', (req, res) => {

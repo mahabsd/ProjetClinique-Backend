@@ -6,9 +6,8 @@ const passport = require('passport');
 
 router.post('/rendezVous/add', passport.authenticate('bearer', { session: false }), (req, res) => {
 
-    var rendezVous = new RendezVous(req.body);
+    let rendezVous = new RendezVous(req.body);
     rendezVous.save().then(function () {
-        console.log(rendezVous);
         res.json(rendezVous);
     }).catch(err => res.status(400).json('Error: ' + err));
 
@@ -43,11 +42,11 @@ router.delete('/rendezVous/delete/:id', passport.authenticate('bearer', { sessio
 })
 //get All rendezVous by ID
 router.get('/getAllRendezVous', passport.authenticate('bearer', { session: false }), (req, res) => {
-    var response=[];
+    let response=[];
     RendezVous.find().populate('userRendezVous').exec().then(function (rendezVous) {
         //  res.send()
         rendezVous.forEach(element => {
-          var schedule ={
+          let schedule ={
               _id:element._id,
               start: element.start,
               description: element.descrip,

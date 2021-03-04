@@ -4,9 +4,8 @@ const Doctor = require("../models/doctor")
 const passport = require('passport');
 
 router.post('/doctor/add', passport.authenticate('bearer', { session: false }), (req, res) => {
-    var doctor = new Doctor(req.body);
+    let doctor = new Doctor(req.body);
             doctor.save().then(function () {
-                console.log(doctor);
                 res.json(doctor);
             }).catch(err => res.status(400).json('Error: ' + err));
 
@@ -15,7 +14,6 @@ router.post('/doctor/add', passport.authenticate('bearer', { session: false }), 
 //get doctor by ID
 router.get('/doctor/:id',  passport.authenticate('bearer', { session: false }), (req, res) => {
     Doctor.findById(req.params.id).populate('userDoctor').exec().then(data => {
-        // res.send();
          res.status(200).json(data);
      }).catch(err => res.status(400).json('Error: ' + err));
 
@@ -24,7 +22,6 @@ router.get('/doctor/:id',  passport.authenticate('bearer', { session: false }), 
 //update doctor by ID
 router.put('/doctor/update/:id',  passport.authenticate('bearer', { session: false }), (req, res) => {
     Doctor.findByIdAndUpdate(req.params.id, req.body).then(function () {
-        //  res.send();
           res.status(200).json(req.body);
       }).catch(err => res.status(400).json('Error: ' + err));
 
