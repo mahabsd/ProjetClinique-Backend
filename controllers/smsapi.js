@@ -67,46 +67,10 @@ router.put('/sms/update/:id', passport.authenticate('bearer', { session: false }
 });
 
 
-router.get('/getAllsmssPatient', passport.authenticate('bearer', { session: false }), async (req, res) => {
+router.get('/getAllsmss', passport.authenticate('bearer', { session: false }), async (req, res) => {
 
 
-    await Sms.find({ smsOwner: { $exists: true, $ne: null } }).populate('smsOwner').then(function (smss) {
-
-
-        res.status(200).json(smss);
-    }).catch(err => res.status(400).json('Error: ' + err));
-
-
-
-});
-router.get('/getAllsmssacts', passport.authenticate('bearer', { session: false }), async (req, res) => {
-
-
-    await Sms.find({ acts: { $exists: true, $ne: null } }).populate('acts').exec().then(function (smss) {
-
-
-        res.status(200).json(smss);
-    }).catch(err => res.status(400).json('Error: ' + err));
-
-
-
-});
-router.get('/getAllsmssdocs', passport.authenticate('bearer', { session: false }), async (req, res) => {
-
-
-    await Sms.find({ docs: { $exists: true, $ne: null } }).populate('docs').exec().then(function (smss) {
-
-
-        res.status(200).json(smss);
-    }).catch(err => res.status(400).json('Error: ' + err));
-
-
-
-});
-router.get('/getAllsmssauto', passport.authenticate('bearer', { session: false }), async (req, res) => {
-
-
-    await Sms.find({ user: { $exists: true, $ne: null } }).populate('userOwner').exec().then(function (smss) {
+    await Sms.find({}).populate('smsOwner').exec().then(function (smss) {
 
 
         res.status(200).json(smss);
@@ -118,7 +82,8 @@ router.get('/getAllsmssauto', passport.authenticate('bearer', { session: false }
 
 
 
-cron.schedule('*/5 * * * *', function (res) {
+
+cron.schedule('0 1 * * *', function (res) {
     Patient.count(function (err, count) {
         console.dir(err);
         console.dir(count);
@@ -136,6 +101,8 @@ cron.schedule('*/5 * * * *', function (res) {
                             status: "en cours",
                             userOwner: element._id,
                             smsOwner: element._id,
+                            onModel: 'Patient',
+                            
 
                             contacts: {
                                 phone: element.contacts.phone,
@@ -166,6 +133,7 @@ cron.schedule('*/5 * * * *', function (res) {
                         let message = {
                             status: "en cours",
                             smsOwner: element._id,
+                            onModel: 'Patient',
                             contacts: {
                                 phone: element.contacts.phone,
                                 type: "0",
@@ -200,6 +168,7 @@ cron.schedule('*/5 * * * *', function (res) {
                                 message: "Clinique Okba Vous informe que le vaccin de votre nouveau né est prévu pour cette semaine",
                             },
                             smsOwner: element._id,
+                            onModel: 'Patient',
                         }
 
                         Sms.create(message).then(function (sms) {
@@ -221,7 +190,8 @@ cron.schedule('*/5 * * * *', function (res) {
                                 type: "0",
                                 message: "Clinique Okba Vous souhaite un joyeuse Anniversaire",
                             },
-                            docs: element._id,
+                            smsOwner: element._id,
+                            onModel: 'Doctor',
                         }
 
                         Sms.create(message).then(function (sms) {
