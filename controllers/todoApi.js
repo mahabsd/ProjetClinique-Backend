@@ -5,7 +5,7 @@ const passport = require('passport');
 
 router.post('/todo/add', passport.authenticate('bearer', { session: false }), (req, res) => {
 
-    var todo = new Todo(req.body);
+    let todo = new Todo(req.body);
     todo.save().then(function () {
         res.json(todo);
     }).catch(err => res.status(400).json('Error: ' + err));

@@ -1,10 +1,10 @@
 const nodemailer = require('nodemailer');
 const express = require('express');
 const router = express.Router();
-var passport = require('passport');
+let passport = require('passport');
 
 // create reusable transporter object using the default SMTP transport
-var transporter = nodemailer.createTransport("SMTP", {
+let transporter = nodemailer.createTransport("SMTP", {
     host: 'smtp.gmail.com',
     port: 465,
     secure: true,
@@ -18,7 +18,7 @@ var transporter = nodemailer.createTransport("SMTP", {
 //add new user
 router.post('/sendmail', passport.authenticate('bearer', { session: false }),  (req, res) => {
 
-                    var mailOptions = {
+                    let mailOptions = {
                         from:  '****@gmail.com' ,
                         to: req.body.emailreceiver,
                         subject:  req.body.subject, // Subject line

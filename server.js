@@ -1,17 +1,17 @@
-var createError = require('http-errors');
-var express = require('express');
+let createError = require('http-errors');
+let express = require('express');
 require('./db/connect');
 require('./db/init-script');
 require('./config/passport');
 require('./controllers/soldeConge');
-require('./controllers/smsAuto');
 require('request');
 
 const hostname = "127.0.0.1";
 const port = 3000;
-var bodyParser = require('body-parser');
-var app = express();
-var cors = require('cors');
+let bodyParser = require('body-parser');
+let app = express();
+let cors = require('cors');
+
 const congeApi = require('./controllers/congeApi');
 const patientApi = require('./controllers/patientApi');
 const serviceApi = require('./controllers/serviceApi');

@@ -5,10 +5,8 @@ const passport = require('passport');
 
 router.post('/actionnaire/add',  passport.authenticate('bearer', { session: false }), (req, res) => {
 
-    var actionnaire = new Actionnaire(req.body);
+    let actionnaire = new Actionnaire(req.body);
             actionnaire.save().then(function () {
-                // console.log(actionnaire);
-                // res.json(actionnaire);
                 res.status(200).json(actionnaire);
             }).catch(err => res.status(400).json('Error: ' + err));
 
@@ -17,7 +15,6 @@ router.post('/actionnaire/add',  passport.authenticate('bearer', { session: fals
 //get actionnaire by ID
 router.get('/actionnaire/:id',  passport.authenticate('bearer', { session: false }), (req, res) => {
     Actionnaire.findById(req.params.id).populate('userActionnaire').exec().then(data => {
-        // res.send();
          res.status(200).json(data);
      }).catch(err => res.status(400).json('Error: ' + err));
 
@@ -26,7 +23,6 @@ router.get('/actionnaire/:id',  passport.authenticate('bearer', { session: false
 //update actionnaire by ID
 router.put('/actionnaire/update/:id',  passport.authenticate('bearer', { session: false }), (req, res) => {
     Actionnaire.findByIdAndUpdate(req.params.id, req.body).then(function () {
-        // res.send();
          res.status(200).json(req.body);
      }).catch(err => res.status(400).json('Error: ' + err));
 

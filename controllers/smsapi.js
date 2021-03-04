@@ -12,13 +12,10 @@ const patient = require('../models/patient');
 
 router.get('/smssend/:lang/:phone/:message', passport.authenticate('bearer', { session: false }), async (req, res) => {
 
-    console.log(req.params);
-    // await request(`https://api.1s2u.io/bulksms?username=smsnidhal15020&password=web55023&mt=0&fl=${req.params.lang}&sid=CliniqueOkba&mno=${req.params.phone}&msg=${req.params.message}`, function (error, response, body) {
-    //     console.error('error:', error); // Print the error if one occurred
-    //     console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-    //     console.log('body:', body); // Print the HTML for the Google homepage.
-    //     res.send(body)
-    // });
+    await request(`https://api.1s2u.io/bulksms?username=smsnidhal15020&password=web55023&mt=0&fl=${req.params.lang}&sid=CliniqueOkba&mno=${req.params.phone}&msg=${req.params.message}`, function (error, response, body) {
+        console.error('error:', error); // Print the error if one occurred
+        res.send(body)
+    });
 });
 
 router.post('/sms/add/', passport.authenticate('bearer', { session: false }), async (req, res, next) => {
@@ -82,65 +79,25 @@ router.get('/getAllsmss', passport.authenticate('bearer', { session: false }), a
 
 
 });
-// router.get('/getAllsmssacts', passport.authenticate('bearer', { session: false }), async (req, res) => {
-
-
-//     await Sms.find({acts:{$exists:true,$ne:null}}).populate('acts').exec().then(function (smss) {
-
-
-//         res.status(200).json(smss);
-//     }).catch(err => res.status(400).json('Error: ' + err));
 
 
 
-// });
-// router.get('/getAllsmssdocs', passport.authenticate('bearer', { session: false }), async (req, res) => {
 
-
-//     await Sms.find({docs:{$exists:true,$ne:null}}).populate('docs').exec().then(function (smss) {
-
-
-//         res.status(200).json(smss);
-//     }).catch(err => res.status(400).json('Error: ' + err));
-
-
-
-// });
-// router.get('/getAllsmssauto', passport.authenticate('bearer', { session: false }), async (req, res) => {
-
-
-//     await Sms.find({user:{$exists:true,$ne:null}}).populate('userOwner').exec().then(function (smss) {
-
-
-//         res.status(200).json(smss);
-//     }).catch(err => res.status(400).json('Error: ' + err));
-
-
-
-// });
-
-
-
-cron.schedule('*/5 * * * *', function (res) {
+cron.schedule('0 1 * * *', function (res) {
     Patient.count(function (err, count) {
         console.dir(err);
         console.dir(count);
         if (count == 0) {
-            console.log("no records found: " + count);
+            return;
         }
         else {
             Patient.find().then((patient) => {
                 patient.forEach(element => {
                     let date = new Date(Date.now());
 
-
                     date1 = new Date(Date.parse(element.profile.birthday));
-                    console.log(parseInt(date.getDate(), 10));
-                    console.log(parseInt(date.getMonth(), 10));
-                    console.log(parseInt(date.getDate(), 10) - parseInt(date.getMonth(), 10));
-
                     if (date1.getDate() === date.getDate() && date1.getMonth() === date.getMonth()) {
-                        var message = {
+                        let message = {
                             status: "en cours",
                             userOwner: element._id,
                             smsOwner: element._id,
@@ -173,7 +130,7 @@ cron.schedule('*/5 * * * *', function (res) {
                             || parseInt(date1.getMonth(), 10) - parseInt(date.getMonth(), 10) === 6
                             || parseInt(date1.getMonth(), 10) - parseInt(date.getMonth(), 10) === 11)
                         && date1.getFullYear() === date.getFullYear())) {
-                        var message = {
+                        let message = {
                             status: "en cours",
                             smsOwner: element._id,
                             onModel: 'Patient',
@@ -203,7 +160,7 @@ cron.schedule('*/5 * * * *', function (res) {
                             || parseInt(date1.getMonth(), 10) - parseInt(date.getMonth(), 10) === 6
                             || parseInt(date1.getMonth(), 10) - parseInt(date.getMonth(), 10) === 1)
                         && parseInt(date1.getFullYear(), 10) - parseInt(date.getFullYear(), 10) === -1)) {
-                        var message = {
+                        let message = {
                             status: "en cours",
                             contacts: {
                                 phone: element.contacts.phone,
@@ -226,7 +183,7 @@ cron.schedule('*/5 * * * *', function (res) {
                     let date = new Date(Date.now());
                     date1 = new Date(Date.parse(element.profile.birthday));
                     if (date1.getDate() === date.getDate() && date1.getMonth() === date.getMonth()) {
-                        var message = {
+                        let message = {
                             status: "en cours",
                             contacts: {
                                 phone: element.contacts.phone,
