@@ -27,7 +27,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post('/sendMessage/:idChat', [upload.array('myFiles', 12), passport.authenticate('bearer', { session: false })], async (req, res) => {
-    console.log(req.body);
+   
 
     if ((req.body.content !== null && req.body.content !== undefined)||(req.file != null)) {
         const chat = await Chat.findById(req.params.idChat);
