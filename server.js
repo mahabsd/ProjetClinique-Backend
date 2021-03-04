@@ -49,7 +49,11 @@ app.use('/chat', chat)
 const io = require('socket.io').listen(8080).sockets;
 app.set('io', io);
 
+app.get("/", function (request, response){
+  //show this file when the "/" is requested
+  response.sendFile(__dirname+"/views/index.html");
+});
 
 app.listen(port, () => {
- // console.log("server is running at http://" + hostname + ":" + port);
+  console.log("server is running at http://" + hostname + ":" + port);
 });
