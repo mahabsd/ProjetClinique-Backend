@@ -50,6 +50,6 @@ const io = require('socket.io').listen(8080).sockets;
 app.set('io', io);
 
 
-app.listen(port, hostname, () => {
-  console.log("server is running at http://" + hostname + ":" + port);
+app.listen(port, () => {
+ // console.log("server is running at http://" + hostname + ":" + port);
 });
