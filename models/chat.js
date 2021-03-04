@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var privateChat = new  Schema(
+let privateChat = new  Schema(
    { candidat1:{type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     candidat2:{type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     messages:[ {

@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-var schema = mongoose.Schema;
+const schema = mongoose.Schema;
 
 
-var todoSchema = new schema(
+let todoSchema = new schema(
    { text: {
         type: String
     },
