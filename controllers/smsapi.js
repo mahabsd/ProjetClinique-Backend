@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router();
-const request = require('request');
+//const request = require('request');
 const Sms = require("../models/sms")
 const cron = require('node-cron');
 const passport = require('passport');
@@ -8,13 +8,13 @@ const Patient = require("../models/patient");
 const Doctor = require("../models/doctor");
 
 
-router.get('/smssend/:lang/:phone/:message', passport.authenticate('bearer', { session: false }), async (req, res) => {
+// router.get('/smssend/:lang/:phone/:message', passport.authenticate('bearer', { session: false }), async (req, res) => {
 
-    await request(`https://api.1s2u.io/bulksms?username=smsnidhal15020&password=web55023&mt=0&fl=${req.params.lang}&sid=CliniqueOkba&mno=${req.params.phone}&msg=${req.params.message}`, function (error, response, body) {
-        console.error('error:', error); // Print the error if one occurred
-        res.send(body)
-    });
-});
+//     await request(`https://api.1s2u.io/bulksms?username=smsnidhal15020&password=web55023&mt=0&fl=${req.params.lang}&sid=CliniqueOkba&mno=${req.params.phone}&msg=${req.params.message}`, function (error, response, body) {
+//         console.error('error:', error); // Print the error if one occurred
+//         res.send(body)
+//     });
+// });
 
 router.post('/sms/add/', passport.authenticate('bearer', { session: false }), async (req, res, next) => {
 
