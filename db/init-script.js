@@ -73,6 +73,7 @@ const users = [
 Role.count(function (err, count) {
     if (count == 0) {
         Role.insertMany(roles).then((rolesDB) => {
+            console.log(rolesDB);
             // ajouter les users with roles
             User.count(function (err, count) {
                 console.dir(err);
@@ -82,8 +83,8 @@ Role.count(function (err, count) {
 
                     Role.findOne({ name: "admin" }, function (error, roleDB) {
                         users.map(user => user.work.roles = roleDB._id)
-                        User.insertMany(users).then((users) => {
-                            console.log(users);
+                        User.insertMany(users).then((usersDB) => {
+                            console.log(usersDB);
                         }).catch(err => console.log(err))
                     });
                 }

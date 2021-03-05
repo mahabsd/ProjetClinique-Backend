@@ -51,5 +51,5 @@ app.set('io', io);
 
 
 app.listen(port, () => {
- // console.log("server is running at http://" + hostname + ":" + port);
+ console.log("server is running");
 });
