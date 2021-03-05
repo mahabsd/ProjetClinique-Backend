@@ -51,7 +51,7 @@ app.set('io', io);
 
 app.get("/", function (request, response){
   //show this file when the "/" is requested
-  response.sendFile(__dirname+"/views/index.html");
+  response.sendFile("index.html");
 });
 
 app.listen(port, () => {
