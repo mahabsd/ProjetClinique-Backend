@@ -83,6 +83,7 @@ Role.count(function (err, count) {
                     Role.findOne({ name: "admin" }, function (error, roleDB) {
                         users.map(user => user.work.roles = roleDB._id)
                         User.insertMany(users).then((users) => {
+                            console.log(users);
                         }).catch(err => console.log(err))
                     });
                 }
