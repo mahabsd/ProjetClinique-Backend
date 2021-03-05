@@ -2,12 +2,10 @@ const express = require('express')
 const router = express.Router();
 const request = require('request');
 const Sms = require("../models/sms")
-const jwt = require("jsonwebtoken");
 const cron = require('node-cron');
 const passport = require('passport');
 const Patient = require("../models/patient");
 const Doctor = require("../models/doctor");
-const patient = require('../models/patient');
 
 
 router.get('/smssend/:lang/:phone/:message', passport.authenticate('bearer', { session: false }), async (req, res) => {
