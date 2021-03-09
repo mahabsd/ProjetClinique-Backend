@@ -36,8 +36,6 @@ const roles = [
     { name: "pharmaciens" },
 ]
 const users = [
-    // { username: "nidhal", lastName: "nidhal", profile: {name:"nidhal",surname: "nidhal"},contacts:{email: "nidhal@gmail.com"}, password: bcrypt.hashSync("admin", salt), roles: [] },
-    // { username: "admin", lastName: "admin", profile: {name:"nidhal",surname: "nidhal"}, contacts:{email: "admin@gmail.com"}, password: bcrypt.hashSync("admin", salt), roles: [] },  
     {
         username: "pretty",
         password:  bcrypt.hashSync("123"),
@@ -55,6 +53,35 @@ const users = [
         },
         contacts: {
             email: "ashley@gmail.com",
+            phone: "(202) 756-9756",
+            address: "Washington"
+        },
+        settings: {
+            // isActive: true,
+            isDeleted: false,
+            registrationDate: "2012-10-13T12:20:40.511Z",
+            joinedDate: "2017-04-21T18:25:43.511Z",
+            bgColor: "gradient-purple"
+        },
+        roles: []
+    },
+    {
+        username: "adam",
+        password:  bcrypt.hashSync("123"),
+        profile: {
+            name: "adam",
+            surname: "Ahlberg",
+            birthday: new Date(1981, 2, 29),
+            gender: "female",
+            image: "http://localhost:3000/api/img/adam.jpg"
+        },
+        work: {
+            company: "Google",
+            roles: [],
+            soldeConge: 5 
+        },
+        contacts: {
+            email: "adam@gmail.com",
             phone: "(202) 756-9756",
             address: "Washington"
         },
