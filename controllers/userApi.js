@@ -99,7 +99,7 @@ router.put('/user/update/:id', [upload.single('image'), passport.authenticate('b
     bcrypt.hash(user.password, 10, function (err, hash) {
         user.password = hash;
         if (req.file) {
-            user.profile.image = "http://localhost:3000/api/"+req.file.path
+            user.profile.image = "https://okbaclinical.herokuapp.com/api/"+req.file.path
         }
         User.findByIdAndUpdate(req.params.id, user).then(function (user) {
             res.status(200).json(
