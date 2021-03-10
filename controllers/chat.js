@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
         const fileName = Date.now() + path.extname(file.originalname);
         const chat = await Chat.findById(req.params.idChat);
         const io = req.app.get('io');
-        const filePath = "http://localhost:3000/uploads/" + fileName;
+        const filePath = "https://okbaclinical.herokuapp.com/uploads/" + fileName;
         const message = {
             logo: req.body.logo,
             candidat: req.body.candidat,
