@@ -7,7 +7,7 @@ require('./controllers/soldeConge');
 require('request');
 
 const hostname = "127.0.0.1";
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 let bodyParser = require('body-parser');
 let app = express();
 let cors = require('cors');
@@ -50,6 +50,6 @@ const io = require('socket.io').listen(8080).sockets;
 app.set('io', io);
 
 
-app.listen(port, hostname, () => {
+app.listen(port, () => {
  console.log("server is running");
 });
