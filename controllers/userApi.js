@@ -45,7 +45,7 @@ router.post('/user/add/', [upload.single('image'), passport.authenticate('bearer
         settings: JSON.parse(formData.settings),
     })
     if (req.file) {
-        user.profile.image = "https://okbaclinical.herokuapp.com/api/"+ req.file.path
+        user.profile.image = "https://okbaclinical-backend.herokuapp.com/api/"+ req.file.path
     }
     bcrypt.hash(user.password, 10, function (err, hash) {
         user.password = hash;
