@@ -40,16 +40,18 @@ app.use('/api/actionnaires', actionnairesApi);
 app.use('/api/doctors', doctorsApi);
 app.use('/api/rendezvous', rendezvousApi);
 app.use('/api/todos', todo);
-
 app.use('/api/smsing', smsApi);
-
 app.use('/api/notifications', notif)
-
 app.use('/api/chat', chat)
-const io = require('socket.io').listen(3000).sockets;
+
+const http = require('http');
+const socketIO = require('socket.io');
+const server = http.createServer(app);  
+const io = socketIO(server);
+//const io = require('socket.io').listen(3000).sockets;
 app.set('io', io);
 
 
-app.listen(port, () => {
+app.listen(process.env.port || port, () => {
  console.log("server is running");
 });
