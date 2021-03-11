@@ -7,8 +7,7 @@ require('./controllers/soldeConge');
 require('request');
 
 const hostname = "127.0.0.1";
-
-const port = 3000;
+const port =process.env.port || 3000;
 let bodyParser = require('body-parser');
 let app = express();
 let cors = require('cors');
@@ -49,7 +48,7 @@ app.use('/api/chat', chat)
 // const socketIO = require('socket.io');
 // const server = http.createServer(app);  
 // const io = socketIO(server);
-const io = require('socket.io').listen(8080).sockets;
+const io = require('socket.io').listen(8001).sockets;
 app.set('io', io);
 
 
