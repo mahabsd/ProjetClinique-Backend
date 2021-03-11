@@ -7,7 +7,7 @@ const path = require('path');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'https://okbaclinical-backend.herokuapp.com/uploads')
+        cb(null, './uploads')
     },
     filename: async function (req, file, cb) {
         const fileName = Date.now() + path.extname(file.originalname);

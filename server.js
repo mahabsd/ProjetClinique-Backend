@@ -34,7 +34,7 @@ app.use('/api/conges', congeApi);
 app.use('/api/patients', patientApi);
 app.use('/api/services', serviceApi);
 app.use('/api/maintenances', maintenanceApi);
-app.use('/api/img', express.static('img'));
+app.use('/img', express.static('img'));
 app.use('/uploads', express.static('uploads'));
 app.use('/api/actionnaires', actionnairesApi);
 app.use('/api/doctors', doctorsApi);
