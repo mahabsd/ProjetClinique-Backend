@@ -48,7 +48,7 @@ app.use('/api/chat', chat)
 // const socketIO = require('socket.io');
 // const server = http.createServer(app);  
 // const io = socketIO(server);
-const io = require('socket.io').listen(3000).sockets;
+const io = require('socket.io').listen(8080).sockets;
 app.set('io', io);
 
 
