@@ -43,10 +43,10 @@ app.use('/api/todos', todo);
 
 app.use('/api/smsing', smsApi);
 
-app.use('/notifications', notif)
+app.use('/api/notifications', notif)
 
 app.use('/api/chat', chat)
-const io = require('socket.io').listen(8080).sockets;
+const io = require('socket.io').listen(3000).sockets;
 app.set('io', io);
 
 
