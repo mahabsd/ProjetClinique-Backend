@@ -45,7 +45,7 @@ app.use('/api/smsing', smsApi);
 
 app.use('/notifications', notif)
 
-app.use('/chat', chat)
+app.use('api/chat', chat)
 const io = require('socket.io').listen(8080).sockets;
 app.set('io', io);
 
