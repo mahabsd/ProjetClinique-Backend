@@ -41,11 +41,11 @@ router.post('/user/add/', [upload.single('image'), passport.authenticate('bearer
         profile: JSON.parse(formData.profile),
         work: JSON.parse(formData.work),
         contacts: JSON.parse(formData.contacts),
-    //    social: JSON.parse(formData.social),
+        //social: JSON.parse(formData.social),
         settings: JSON.parse(formData.settings),
     })
     if (req.file) {
-        user.profile.image = "https://okbaclinical-backend.herokuapp.com/api/"+ req.file.path
+        user.profile.image = "https://okbaclinical-backend.herokuapp.com/"+ req.file.path
     }
     bcrypt.hash(user.password, 10, function (err, hash) {
         user.password = hash;
