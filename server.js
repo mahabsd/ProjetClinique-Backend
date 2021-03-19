@@ -5,6 +5,7 @@ require('./db/init-script');
 require('./config/passport');
 require('./controllers/soldeConge');
 require('request');
+const path = require('path');
 
 const hostname = "127.0.0.1";
 const port =process.env.PORT;
@@ -35,7 +36,7 @@ app.use('/api/patients', patientApi);
 app.use('/api/services', serviceApi);
 app.use('/api/maintenances', maintenanceApi);
 app.use('/img', express.static('img'));
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(path.join(__dirname,'uploads')));
 app.use('/api/actionnaires', actionnairesApi);
 app.use('/api/doctors', doctorsApi);
 app.use('/api/rendezvous', rendezvousApi);
