@@ -53,6 +53,6 @@ const io = socketIO(server);
 app.set('io', io);
 
 
-app.listen(port, hostname,() => {
+app.listen(port,() => {
  console.log("server is running");
 });
