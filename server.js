@@ -8,7 +8,7 @@ require('request');
 const path = require('path');
 
 const hostname = "127.0.0.1";
-const port =process.env.PORT;
+const port =process.env.PORT || 8080;
 let bodyParser = require('body-parser');
 let app = express();
 let cors = require('cors');
