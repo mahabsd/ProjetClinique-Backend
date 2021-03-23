@@ -49,6 +49,7 @@ const http = require('http');
 const socketIO = require('socket.io');
 const server = http.createServer(app);  
 const io = socketIO(server);
+io.set('origins', '*:*');
 //const io = require('socket.io').listen(8080).sockets;
 app.set('io', io);
 
