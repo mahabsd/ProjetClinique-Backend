@@ -45,7 +45,7 @@ router.post('/user/add/', [upload.single('image'), passport.authenticate('bearer
         settings: JSON.parse(formData.settings),
     })
     if (req.file) {
-        user.profile.image = "https://okbaclinical-backend.herokuapp.com/"+ req.file.path
+        user.profile.image = "http://localhost:8080/"+ req.file.path
     }
     bcrypt.hash(user.password, 10, function (err, hash) {
         user.password = hash;
@@ -99,7 +99,7 @@ router.put('/user/update/:id', [upload.single('image'), passport.authenticate('b
     bcrypt.hash(user.password, 10, function (err, hash) {
         user.password = hash;
         if (req.file) {
-            user.profile.image = "https://okbaclinical-backend.herokuapp.com/"+req.file.path
+            user.profile.image = "http://localhost:8080/"+req.file.path
         }
         User.findByIdAndUpdate(req.params.id, user).then(function (user) {
             res.status(200).json(

@@ -8,7 +8,7 @@ require('request');
 const path = require('path');
 
 const hostname = "127.0.0.1";
-const port =process.env.PORT || 8080;
+const port =process.env.PORT || 3000;
 let bodyParser = require('body-parser');
 let app = express();
 let cors = require('cors');
@@ -47,13 +47,13 @@ app.use('/api/chat', chat)
 
 const http = require('http');
 const socketIO = require('socket.io');
-const server = http.createServer(app);  
-const io = socketIO(server);
-io.set('origins', '*:*');
-//const io = require('socket.io').listen(8080).sockets;
+// const server = http.createServer(app);  
+// const io = socketIO(server);
+// io.set('origins', '*:*');
+const io = require('socket.io').listen(8080).sockets;
 app.set('io', io);
 
 
-app.listen(port,() => {
+app.listen(port, hostname, () => {
  console.log("server is running");
 });

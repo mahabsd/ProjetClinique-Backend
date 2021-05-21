@@ -44,7 +44,7 @@ const users = [
             surname: "Ahlberg",
             birthday: new Date(1981, 2, 29),
             gender: "female",
-            image: "https://okbaclinical-backend.herokuapp.com/img/ashley.jpg"
+            image: "http://localhost:8080/img/ashley.jpg"
         },
         work: {
             company: "Google",
@@ -73,7 +73,7 @@ const users = [
             surname: "Ahlberg",
             birthday: new Date(1981, 2, 29),
             gender: "female",
-            image: "https://okbaclinical-backend.herokuapp.com/img/adam.jpg"
+            image: "http://localhost:8080/img/adam.jpg"
         },
         work: {
             company: "Google",
